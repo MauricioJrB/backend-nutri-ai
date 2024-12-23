@@ -1,6 +1,6 @@
-import NutritionODM from '../Models/NutritionCalculate';
-import INutritionCalculations from '../Interfaces/INutritionCalculations';
-import NutritionCalculate from '../Domains/NutritionCalculate';
+import NutritionODM from '../Models/Nutrition';
+import INutrition from '../Interfaces/INutrition';
+import NutritionCalculate from '../Domains/NutritionDomain';
 import IUser from '../Interfaces/IUserMacro';
 import UserService from './UserMacroService';
 import mongoose from 'mongoose';
@@ -9,71 +9,63 @@ export default class NutritionService {
   private nutritionODM = new NutritionODM();
   private userService = new UserService();
 
-  private calculateNutrition(user: IUser): INutritionCalculations {
+  private calculateNutrition(user: IUser): INutrition {
     const { id, age, gender, height, weight, level, objective } = user;
 
-    const heightInCm = height * 100;
+    const heightCM = height * 100;
+    let physicalActivity = 0;
+    let totalCalories = 0;
 
     const BMR =
       gender === 'Masculino'
-        ? 10 * weight + 6.25 * heightInCm - 5 * age + 5
-        : 10 * weight + 6.25 * heightInCm - 5 * age - 161;
-
-    let activityMultiplayer = 0;
+        ? 88.362 + 13.397 * weight + 4.799 * heightCM - 5.677 * age
+        : 447.593 + 9.247 * weight + 3.098 * heightCM - 4.33 * age;
 
     if (level === 'Sedentario') {
-      activityMultiplayer = 1.2;
+      physicalActivity = 1.2;
+    } else if (level === 'Levemente ativo') {
+      physicalActivity = 1.375;
+    } else if (level === 'Moderadamente ativo') {
+      physicalActivity = 1.55;
+    } else {
+      physicalActivity = 1.725;
     }
 
-    if (level === 'Levemente ativo') {
-      activityMultiplayer = 1.375;
-    }
+    const TDEE = BMR * physicalActivity;
 
-    if (level === 'Moderadamente ativo') {
-      activityMultiplayer = 1.55;
-    }
-
-    if (level === 'Muito ativo') {
-      activityMultiplayer = 1.725;
-    }
-
-    const TDEE = BMR * activityMultiplayer;
-
-    let totalCalories = TDEE;
     if (objective === 'Perder peso') {
-      totalCalories -= 500;
+      totalCalories = TDEE * 0.8;
     } else if (objective === 'Ganhar musculo') {
-      totalCalories += 500;
+      totalCalories = TDEE * 1.15;
+    } else {
+      totalCalories = TDEE;
     }
 
-    const proteinCalories = 0.3 * totalCalories;
-    const carbCalories = 0.4 * totalCalories;
-    const fatCalories = 0.3 * totalCalories;
+    const proteinGrams = 2.2 * weight;
+    const fatGrams = 0.9 * weight;
 
-    const proteinGrams = proteinCalories / 4;
-    const carbsGrams = carbCalories / 4;
-    const fatsGrams = fatCalories / 9;
+    const proteinKcal = proteinGrams * 4;
+    const fatKcal = fatGrams * 9;
+    const carbohydratesKcal = totalCalories - proteinKcal - fatKcal;
 
-    const formattedBMR = parseFloat(BMR.toFixed(2));
-    const formattedTDEE = parseFloat(TDEE.toFixed(2));
-    const formattedCalories = parseFloat(totalCalories.toFixed(2));
-    const formattedProtein = parseFloat(proteinGrams.toFixed(2));
-    const formattedCarb = parseFloat(carbsGrams.toFixed(2));
-    const formattedFat = parseFloat(fatsGrams.toFixed(2));
+    const carbohydratesGrams = carbohydratesKcal / 4;
 
     return {
       userId: new mongoose.Types.ObjectId(id),
-      BMR: formattedBMR,
-      TDEE: formattedTDEE,
-      totalCalories: formattedCalories,
-      proteinGrams: formattedProtein,
-      carbsGrams: formattedCarb,
-      fatsGrams: formattedFat,
+      BMR: parseFloat(BMR.toFixed(2)),
+      TDEE: parseFloat(TDEE.toFixed(2)),
+      totalCalories: parseFloat(totalCalories.toFixed(2)),
+      carbGrams: parseFloat(carbohydratesGrams.toFixed(2)),
+      proteinGrams: parseFloat(proteinGrams.toFixed(2)),
+      fatGrams: parseFloat(fatGrams.toFixed(2)),
+      carbCalories: parseFloat(carbohydratesKcal.toFixed(2)),
+      proteinCalories: parseFloat(proteinKcal.toFixed(2)),
+      fatCalories: parseFloat(fatKcal.toFixed(2)),
       createdAt: new Date(),
     };
   }
 
-  private createNutrition(nutrition: INutritionCalculations) {
+  private createNutrition(nutrition: INutrition) {
     return new NutritionCalculate(nutrition);
   }
 
