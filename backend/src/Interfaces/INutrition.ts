@@ -1,12 +1,15 @@
 import mongoose from 'mongoose';
 
-export default interface INutritionCalculations {
+export default interface INutrition {
   userId: mongoose.Types.ObjectId;
   BMR: number;
   TDEE: number;
   totalCalories: number;
   proteinGrams: number;
-  carbsGrams: number;
-  fatsGrams: number;
+  carbGrams: number;
+  fatGrams: number;
+  proteinCalories: number;
+  carbCalories: number;
+  fatCalories: number;
   createdAt: Date;
 }
