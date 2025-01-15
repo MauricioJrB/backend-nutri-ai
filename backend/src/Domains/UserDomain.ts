@@ -1,6 +1,6 @@
-import IUserMacro from '../Interfaces/IUserMacro';
-// Domínio para estruturar as características que são retornadas do body ou do próprio model para o service.
-export default class UserMacroDomain implements IUserMacro {
+import IUser from '../Interfaces/IUser';
+
+export default class UserDomain implements IUser {
   public id: string;
   public username: string;
   public age: number;
@@ -15,7 +15,7 @@ export default class UserMacroDomain implements IUserMacro {
   public objective: 'Perder peso' | 'Ganhar musculo' | 'Manutencao';
   public trainingFrequency: number;
 
-  constructor(user: IUserMacro) {
+  constructor(user: IUser) {
     this.id = user.id;
     this.username = user.username;
     this.age = user.age;
