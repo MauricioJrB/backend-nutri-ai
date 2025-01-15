@@ -1,4 +1,4 @@
-export default interface IUserMacro {
+export default interface IUser {
   id: string;
   username: string;
   age: number;

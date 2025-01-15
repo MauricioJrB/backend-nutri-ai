@@ -4,8 +4,8 @@ import dotenv from 'dotenv';
 import { connectDB } from './config/database';
 import { errorHandle } from './Middlewares/errorHandle';
 
-import userMacroRoutes from './Routers/userMacroRouter';
-import nutritionRoutes from './Routers/nutritionRouter';
+import userRoutes from './Routers/userRouter';
+import macronutrientesRoutes from './Routers/macronutrientsRouter';
 
 dotenv.config();
 
@@ -17,8 +17,8 @@ app.get('/', (req: Request, res: Response) => {
   res.status(200).json({ message: 'Hello World' });
 });
 
-app.use('/user', userMacroRoutes);
-app.use('/nutrition', nutritionRoutes);
+app.use('/user', userRoutes);
+app.use('/nutrition', macronutrientesRoutes);
 app.use(errorHandle);
 
 export default app;

@@ -1,26 +1,26 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import UserMacroController from '../Controllers/UserMacroController';
+import UserController from '../Controllers/UserController';
 
 const router = Router();
 
 router.post('/create', (req: Request, res: Response, next: NextFunction) => {
-  new UserMacroController(req, res, next).create();
+  new UserController(req, res, next).create();
 });
 
 router.get('/users', (req: Request, res: Response, next: NextFunction) => {
-  new UserMacroController(req, res, next).getAllUsers();
+  new UserController(req, res, next).getAllUsers();
 });
 
 router.get('/:id', (req: Request, res: Response, next: NextFunction) => {
-  new UserMacroController(req, res, next).getUserById();
+  new UserController(req, res, next).getUserById();
 });
 
 router.put('/:id', (req: Request, res: Response, next: NextFunction) => {
-  new UserMacroController(req, res, next).updateUserById();
+  new UserController(req, res, next).updateUserById();
 });
 
 router.delete('/:id', (req: Request, res: Response, next: NextFunction) => {
-  new UserMacroController(req, res, next).deleteUserById();
+  new UserController(req, res, next).deleteUserById();
 });
 
 export default router;
