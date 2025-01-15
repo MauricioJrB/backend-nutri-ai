@@ -1,16 +1,15 @@
-import UserMacroODM from '../Models/UserMacro';
-import IUserMacro from '../Interfaces/IUserMacro';
-import UserMacroDomain from '../Domains/UserMacroDomain';
+import UserODM from '../Models/User';
+import IUser from '../Interfaces/IUser';
+import UserDomain from '../Domains/UserDomain';
 
-export default class UserMacroService {
-  private userODM = new UserMacroODM();
+export default class UserService {
+  private userODM = new UserODM();
 
-  // Essa função ira criar um dominio para as caracteristicas de retornam do body.
-  private createUser(user: IUserMacro) {
-    return new UserMacroDomain(user);
+  private createUser(user: IUser) {
+    return new UserDomain(user);
   }
 
-  public async create(user: IUserMacro) {
+  public async create(user: IUser) {
     const existingUser = await this.userODM.getUserByUsername(user.username);
     if (existingUser) return false;
     const newUser = await this.userODM.create(user);
@@ -28,7 +27,7 @@ export default class UserMacroService {
     return this.createUser(user);
   }
 
-  public async updateUserById(id: string, user: IUserMacro) {
+  public async updateUserById(id: string, user: IUser) {
     const existingUser = await this.userODM.getUserById(id);
     if (!existingUser) return false;
     const updatedUser = await this.userODM.updateUserById(id, user);
