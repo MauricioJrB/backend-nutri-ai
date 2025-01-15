@@ -1,15 +1,15 @@
-import NutritionODM from '../Models/Nutrition';
-import INutrition from '../Interfaces/INutrition';
-import NutritionCalculate from '../Domains/NutritionDomain';
-import IUser from '../Interfaces/IUserMacro';
-import UserService from './UserMacroService';
+import MacronutrientsODM from '../Models/Macronutrients';
+import IMacronutrients from '../Interfaces/IMacronutrients';
+import MacronutrientsDomain from '../Domains/MacronutrientsDomain';
+import IUser from '../Interfaces/IUser';
+import UserService from './UserService';
 import mongoose from 'mongoose';
 
-export default class NutritionService {
-  private nutritionODM = new NutritionODM();
+export default class MacronutrientsService {
+  private macronutrientsODM = new MacronutrientsODM();
   private userService = new UserService();
 
-  private calculateNutrition(user: IUser): INutrition {
+  private calculateMacronutrients(user: IUser): IMacronutrients {
     const { id, age, gender, height, weight, level, objective } = user;
 
     const heightCM = height * 100;
@@ -50,6 +50,8 @@ export default class NutritionService {
 
     const carbohydratesGrams = carbohydratesKcal / 4;
 
+    const amountWaterLiters = 35 * weight;
+
     return {
       userId: new mongoose.Types.ObjectId(id),
       BMR: parseFloat(BMR.toFixed(2)),
@@ -61,12 +63,13 @@ export default class NutritionService {
       carbCalories: parseFloat(carbohydratesKcal.toFixed(2)),
       proteinCalories: parseFloat(proteinKcal.toFixed(2)),
       fatCalories: parseFloat(fatKcal.toFixed(2)),
+      amountWater: parseFloat(amountWaterLiters.toFixed(2)),
       createdAt: new Date(),
     };
   }
 
-  private createNutrition(nutrition: INutrition) {
-    return new NutritionCalculate(nutrition);
+  private createMacronutrients(macronutrients: IMacronutrients) {
+    return new MacronutrientsDomain(macronutrients);
   }
 
   public async create(userId: string) {
@@ -75,18 +78,19 @@ export default class NutritionService {
     if (!user) {
       throw new Error('User not found');
     }
-    const nutrition = this.calculateNutrition(user);
-    await this.nutritionODM.create(nutrition);
-    return this.createNutrition(nutrition);
+    const macronutrients = this.calculateMacronutrients(user);
+    await this.macronutrientsODM.create(macronutrients);
+    return this.createMacronutrients(macronutrients);
   }
 
-  public async getNutritionByUserId(id: string) {
-    const nutrition = await this.nutritionODM.getNutritionByUserId(id);
-    if (!nutrition) return null;
-    return this.createNutrition(nutrition);
+  public async getMacronutrientsByUserId(id: string) {
+    const macronutrients =
+      await this.macronutrientsODM.getMacronutrientsByUserId(id);
+    if (!macronutrients) return null;
+    return this.createMacronutrients(macronutrients);
   }
 
-  public async deleteNutritionById(id: string) {
-    return this.nutritionODM.deleteNutritionById(id);
+  public async deleteMacronutrientsById(id: string) {
+    return this.macronutrientsODM.deleteMacronutrientsById(id);
   }
 }
