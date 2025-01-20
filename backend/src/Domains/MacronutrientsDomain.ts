@@ -2,18 +2,18 @@ import mongoose from 'mongoose';
 import IMacronutrients from '../Interfaces/IMacronutrients';
 
 export default class MacronutrientsDomain {
-  readonly userId: mongoose.Types.ObjectId;
-  protected BMR: number;
-  protected TDEE: number;
-  protected totalCalories: number;
-  protected proteinGrams: number;
-  protected carbGrams: number;
-  protected fatGrams: number;
-  protected carbCalories: number;
-  protected proteinCalories: number;
-  protected fatCalories: number;
-  protected amountWater: number;
-  protected createdAt: Date;
+  public userId: mongoose.Types.ObjectId;
+  public BMR: number;
+  public TDEE: number;
+  public totalCalories: number;
+  public proteinGrams: number;
+  public carbGrams: number;
+  public fatGrams: number;
+  public carbCalories: number;
+  public proteinCalories: number;
+  public fatCalories: number;
+  public amountWater: number;
+  public createdAt: Date;
 
   constructor(macro: IMacronutrients) {
     this.userId = macro.userId;
