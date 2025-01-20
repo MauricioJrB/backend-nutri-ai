@@ -11,7 +11,7 @@ router.post(
 );
 
 router.get('/:id', (req: Request, res: Response, next: NextFunction) => {
-  new MacronutrientsController(req, res, next).deleteMacronutrientsById();
+  new MacronutrientsController(req, res, next).getMacronutrientsById();
 });
 
 router.delete('/:id', (req: Request, res: Response, next: NextFunction) => {
