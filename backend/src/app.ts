@@ -6,6 +6,7 @@ import { errorHandle } from './Middlewares/errorHandle';
 
 import userRoutes from './Routers/userRouter';
 import macronutrientesRoutes from './Routers/macronutrientsRouter';
+import mealRoutes from './Routers/mealRouter';
 
 dotenv.config();
 
@@ -18,7 +19,8 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/user', userRoutes);
-app.use('/nutrition', macronutrientesRoutes);
+app.use('/macronutrients', macronutrientesRoutes);
+app.use('/meal', mealRoutes);
 app.use(errorHandle);
 
 export default app;
