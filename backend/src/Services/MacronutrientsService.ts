@@ -75,10 +75,10 @@ export default class MacronutrientsService {
   public async create(userId: string) {
     const user: IUser | null = await this.userService.getUserById(userId);
 
-    if (!user) {
-      throw new Error('User not found');
-    }
+    if (!user) throw new Error('User not found');
+
     const macronutrients = this.calculateMacronutrients(user);
+
     await this.macronutrientsODM.create(macronutrients);
     return this.createMacronutrients(macronutrients);
   }
@@ -86,7 +86,8 @@ export default class MacronutrientsService {
   public async getMacronutrientsByUserId(id: string) {
     const macronutrients =
       await this.macronutrientsODM.getMacronutrientsByUserId(id);
-    if (!macronutrients) return null;
+    if (!macronutrients) throw new Error('Macronutrients not found');
+
     return this.createMacronutrients(macronutrients);
   }
 
