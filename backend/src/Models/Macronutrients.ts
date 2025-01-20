@@ -25,7 +25,7 @@ export default class MacronutrientsODM {
         createdAt: { type: Date, default: Date.now },
       });
       MacronutrientsODM.model =
-        models.MacronutrientsCalculations ||
+        models.Macronutrients ||
         model<IMacronutrients>('Macronutrients', schema);
     }
   }
