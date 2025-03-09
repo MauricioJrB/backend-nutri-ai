@@ -11,7 +11,6 @@ export default class MealODM {
           type: Schema.Types.ObjectId,
           ref: 'User',
           required: true,
-          unique: true,
         },
         meals: [
           {
@@ -39,6 +38,10 @@ export default class MealODM {
       new: true,
       upsert: true,
     });
+  }
+
+  public async create(meals: IMeal) {
+    return MealODM.model.create(meals);
   }
 
   public async getMealByUserId(userId: string) {

@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import IMeal from '../Interfaces/IMeal';
-import IUser from '../Interfaces/IUser';
+import IUser from '../Interfaces/IUserData';
 import IMacronutrients from '../Interfaces/IMacronutrients';
-import UserService from './UserService';
+import UserService from './UserDataService';
 import MacronutrientsService from './MacronutrientsService';
 import MealDomain from '../Domains/MealDomain';
 import MealODM from '../Models/Meal';
@@ -20,7 +20,6 @@ export default class MealService {
 
     const response = await model.generateContent(`
         Crie uma dieta completa para uma pessoa com as seguintes características:
-        - Nome: ${user.username}
         - Sexo: ${user.gender}
         - Peso atual: ${user.weight}kg
         - Altura: ${user.height}m
@@ -89,17 +88,26 @@ export default class MealService {
     return new MealDomain(meal);
   }
 
-  public async create(userId: string): Promise<IMeal> {
+  public async create(userId: string) {
     const user: IUser | null = await this.userService.getUserById(userId);
+    //verifica se usuario existe
     if (!user) throw new Error('User not found');
 
     const macronutrients: IMacronutrients | null =
       await this.macronutrientsService.getMacronutrientsByUserId(userId);
+    // verifica se macronutrientes existe
 
-    if (!macronutrients) throw new Error('Macronutrients not found');
+    const existingMeal = await this.mealODM.getMealByUserId(userId);
 
+    if (existingMeal) return null;
+
+    // gera dieta
     const generatedMeals = await this.fetchGeneratedMeal(user, macronutrients);
+
+    // mapeia dieta
     const mappedMeals = this.mapGeneratedMeals(userId, generatedMeals);
+
+    // cria a deita
     const meals = await this.mealODM.createOrUpdateMeal(userId, mappedMeals);
 
     return meals;

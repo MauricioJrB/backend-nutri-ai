@@ -1,28 +1,29 @@
 import { NextFunction, Request, Response } from 'express';
-import IUser from '../Interfaces/IUser';
-import UserService from '../Services/UserService';
+import IUserData from '../Interfaces/IUserData';
+import UserDataService from '../Services/UserDataService';
 
-export default class UserController {
+export default class UserDataController {
   private res: Response;
   private req: Request;
   private next: NextFunction;
-  private userService: UserService;
+  private userDataService: UserDataService;
 
   constructor(req: Request, res: Response, next: NextFunction) {
     this.res = res;
     this.req = req;
     this.next = next;
-    this.userService = new UserService();
+    this.userDataService = new UserDataService();
   }
 
   public async create() {
     try {
-      const user: IUser = { ...this.req.body };
-      const newUser = await this.userService.create(user);
+      const { userId } = this.req.body;
+      const user: IUserData = { ...this.req.body };
+      if (!userId)
+        return this.res.status(400).json({ message: 'User ID is required' });
+      const newUser = await this.userDataService.create(userId, user);
       if (!newUser)
-        return this.res
-          .status(400)
-          .json({ message: 'User already exists: ', newUser });
+        return this.res.status(400).json({ message: 'User already exists' });
       return this.res.status(201).json({ message: 'User created: ', newUser });
     } catch (error) {
       return this.res
@@ -31,9 +32,9 @@ export default class UserController {
     }
   }
 
-  public async getAllUsers() {
+  public async getAllUsersData() {
     try {
-      const users = await this.userService.getAllUsers();
+      const users = await this.userDataService.getAllUsers();
       return this.res.status(200).json({ users: users });
     } catch (error) {
       return this.res
@@ -42,10 +43,10 @@ export default class UserController {
     }
   }
 
-  public async getUserById() {
+  public async getUserDataById() {
     try {
-      const id = this.req.params.id;
-      const user = await this.userService.getUserById(id);
+      const userId = this.req.params.id;
+      const user = await this.userDataService.getUserById(userId);
       if (!user)
         return this.res.status(404).json({ message: 'User not found' });
       return this.res.status(200).json(user);
@@ -56,11 +57,14 @@ export default class UserController {
     }
   }
 
-  public async updateUserById() {
+  public async updateUserDataById() {
     try {
-      const id = this.req.params.id;
-      const user: IUser = { ...this.req.body };
-      const updatedUser = await this.userService.updateUserById(id, user);
+      const userId = this.req.params.id;
+      const user: IUserData = { ...this.req.body };
+      const updatedUser = await this.userDataService.updateUserById(
+        userId,
+        user,
+      );
       return this.res
         .status(200)
         .json({ message: 'User updated: ', updatedUser });
@@ -71,14 +75,14 @@ export default class UserController {
     }
   }
 
-  public async deleteUserById() {
+  public async deleteUserDataById() {
     try {
-      const id = this.req.params.id;
-      const user = await this.userService.getUserById(id);
+      const userId = this.req.params.id;
+      const user = await this.userDataService.getUserById(userId);
       if (!user) {
         return this.res.status(400).json({ message: 'User already deleted' });
       }
-      await this.userService.deleteUserById(id);
+      await this.userDataService.deleteUserById(userId);
       return this.res
         .status(200)
         .json({ message: 'User deleted', userDeleted: user });

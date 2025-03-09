@@ -1,7 +1,8 @@
-import IUser from '../Interfaces/IUser';
+import mongoose from 'mongoose';
+import IUserData from '../Interfaces/IUserData';
 
-export default class UserDomain implements IUser {
-  public id: string;
+export default class UserDataDomain implements IUserData {
+  public userId: mongoose.Types.ObjectId;
   public username: string;
   public age: number;
   public gender: 'Feminino' | 'Masculino';
@@ -15,8 +16,8 @@ export default class UserDomain implements IUser {
   public objective: 'Perder peso' | 'Ganhar musculo' | 'Manutencao';
   public trainingFrequency: number;
 
-  constructor(user: IUser) {
-    this.id = user.id;
+  constructor(user: IUserData) {
+    this.userId = user.userId;
     this.username = user.username;
     this.age = user.age;
     this.gender = user.gender;

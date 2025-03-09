@@ -1,26 +1,26 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import UserController from '../Controllers/UserController';
+import UserDataController from '../Controllers/UserDataController';
 
 const router = Router();
 
 router.post('/create', (req: Request, res: Response, next: NextFunction) => {
-  new UserController(req, res, next).create();
+  new UserDataController(req, res, next).create();
 });
 
 router.get('/users', (req: Request, res: Response, next: NextFunction) => {
-  new UserController(req, res, next).getAllUsers();
+  new UserDataController(req, res, next).getAllUsersData();
 });
 
 router.get('/:id', (req: Request, res: Response, next: NextFunction) => {
-  new UserController(req, res, next).getUserById();
+  new UserDataController(req, res, next).getUserDataById();
 });
 
 router.put('/:id', (req: Request, res: Response, next: NextFunction) => {
-  new UserController(req, res, next).updateUserById();
+  new UserDataController(req, res, next).updateUserDataById();
 });
 
 router.delete('/:id', (req: Request, res: Response, next: NextFunction) => {
-  new UserController(req, res, next).deleteUserById();
+  new UserDataController(req, res, next).deleteUserDataById();
 });
 
 export default router;
