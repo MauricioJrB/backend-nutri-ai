@@ -1,29 +1,39 @@
 import { NextFunction, Request, Response } from 'express';
 import MacronutrientsService from '../Services/MacronutrientsService';
-import UserService from '../Services/UserService';
+import UserDataService from '../Services/UserDataService';
 
 export default class MacronutrientsController {
   private res: Response;
   private req: Request;
   private next: NextFunction;
   private macronutrientsService: MacronutrientsService;
-  private userService: UserService;
+  private userService: UserDataService;
 
   constructor(req: Request, res: Response, next: NextFunction) {
     this.res = res;
     this.req = req;
     this.next = next;
     this.macronutrientsService = new MacronutrientsService();
-    this.userService = new UserService();
+    this.userService = new UserDataService();
   }
 
   public async create() {
     try {
       const userId = this.req.params.id;
-      const macronutrients = await this.macronutrientsService.create(userId);
+
+      if (!userId)
+        return this.res.status(400).json({ message: 'User ID is required' });
+
+      const newMacronutrients = await this.macronutrientsService.create(userId);
+
+      if (!newMacronutrients)
+        return this.res
+          .status(400)
+          .json({ message: 'Macronutrients already exists' });
+
       return this.res
         .status(201)
-        .json({ message: 'Macronutrients created', macronutrients });
+        .json({ message: 'Macronutrients created', newMacronutrients });
     } catch (error) {
       return this.res
         .status(500)
@@ -55,15 +65,15 @@ export default class MacronutrientsController {
 
   public async deleteMacronutrientsById() {
     try {
-      const id = this.req.params.id;
+      const userId = this.req.params.id;
       const macronutrients =
-        await this.macronutrientsService.getMacronutrientsByUserId(id);
+        await this.macronutrientsService.getMacronutrientsByUserId(userId);
       if (!macronutrients) {
         return this.res
           .status(400)
           .json({ message: 'Macronutrients already deleted' });
       }
-      await this.macronutrientsService.deleteMacronutrientsById(id);
+      await this.macronutrientsService.deleteMacronutrientsById(userId);
       return this.res.status(200).json({ message: 'Macronutrients deleted' });
     } catch (error) {
       return this.res
