@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import MealService from '../Services/MealService';
-import UserService from '../Services/UserService';
+import UserService from '../Services/UserDataService';
 
 export default class MealController {
   private res: Response;
@@ -20,10 +20,18 @@ export default class MealController {
   public async create() {
     try {
       const userId = this.req.params.id;
-      console.log(userId);
-      const meals = await this.mealService.create(userId);
-      console.log(meals);
-      return this.res.status(201).json({ message: 'Meals created', meals });
+
+      if (!userId)
+        return this.res.status(400).json({ message: 'User ID is required' });
+
+      const newMeals = await this.mealService.create(userId);
+
+      if (!newMeals)
+        return this.res
+          .status(400)
+          .json({ message: 'Macronutrients already exists' });
+
+      return this.res.status(201).json({ message: 'Meals created', newMeals });
     } catch (error) {
       return this.res
         .status(500)
@@ -59,12 +67,12 @@ export default class MealController {
       }
       const meals = await this.mealService.getMealByUserId(userId);
       if (!meals) {
-        return this.res.status(404).json({ message: 'Meal not found' });
+        return this.res.status(400).json({ message: 'Meal nalready deleted' });
       }
-      await this.mealService.deleteMealById(userId); // Await the deletion
+      await this.mealService.deleteMealById(userId);
       return this.res
         .status(200)
-        .json({ message: 'Meal deleted successfully' }); // Add response
+        .json({ message: 'Meal deleted successfully' });
     } catch (error) {
       return this.res
         .status(500)
