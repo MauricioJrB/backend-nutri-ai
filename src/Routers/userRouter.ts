@@ -1,26 +1,26 @@
-import { NextFunction, Request, Response, Router } from 'express';
+import { Request, Response, Router } from 'express';
 import UserController from '../Controllers/UserController';
 
 const router = Router();
 
-router.post('/create', (req: Request, res: Response, next: NextFunction) => {
-  new UserController(req, res, next).create();
+router.post('/signin', (req: Request, res: Response) => {
+  new UserController(req, res).login();
 });
 
-router.get('/users', (req: Request, res: Response, next: NextFunction) => {
-  new UserController(req, res, next).getAllUsers();
+router.post('/signup', (req: Request, res: Response) => {
+  new UserController(req, res).signUp();
 });
 
-router.get('/:id', (req: Request, res: Response, next: NextFunction) => {
-  new UserController(req, res, next).getUserById();
+router.get('/user/:id', (req: Request, res: Response) => {
+  new UserController(req, res).getUser();
 });
 
-router.put('/:id', (req: Request, res: Response, next: NextFunction) => {
-  new UserController(req, res, next).updateUserById();
+router.put('/user/:id', (req, res) => {
+  new UserController(req, res).updatePassword();
 });
 
-router.delete('/:id', (req: Request, res: Response, next: NextFunction) => {
-  new UserController(req, res, next).deleteUserById();
+router.delete('/user/:id', (req, res) => {
+  new UserController(req, res).deleteUser();
 });
 
 export default router;
