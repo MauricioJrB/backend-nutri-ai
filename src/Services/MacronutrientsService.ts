@@ -1,8 +1,8 @@
 import MacronutrientsODM from '../Models/Macronutrients';
 import IMacronutrients from '../Interfaces/IMacronutrients';
 import MacronutrientsDomain from '../Domains/MacronutrientsDomain';
-import IUser from '../Interfaces/IUser';
-import UserService from './UserService';
+import IUser from '../Interfaces/IUserData';
+import UserService from './UserDataService';
 import mongoose from 'mongoose';
 
 export default class MacronutrientsService {
@@ -10,7 +10,7 @@ export default class MacronutrientsService {
   private userService = new UserService();
 
   private calculateMacronutrients(user: IUser): IMacronutrients {
-    const { id, age, gender, height, weight, level, objective } = user;
+    const { userId, age, gender, height, weight, level, objective } = user;
 
     const heightCM = height * 100;
     let physicalActivity = 0;
@@ -53,7 +53,7 @@ export default class MacronutrientsService {
     const amountWaterLiters = 35 * weight;
 
     return {
-      userId: new mongoose.Types.ObjectId(id),
+      userId: new mongoose.Types.ObjectId(userId),
       BMR: parseFloat(BMR.toFixed(2)),
       TDEE: parseFloat(TDEE.toFixed(2)),
       totalCalories: parseFloat(totalCalories.toFixed(2)),
@@ -77,21 +77,26 @@ export default class MacronutrientsService {
 
     if (!user) throw new Error('User not found');
 
+    const existingMacronutrients =
+      await this.macronutrientsODM.getMacronutrientsByUserId(userId);
+
+    if (existingMacronutrients) return null;
+
     const macronutrients = this.calculateMacronutrients(user);
 
     await this.macronutrientsODM.create(macronutrients);
     return this.createMacronutrients(macronutrients);
   }
 
-  public async getMacronutrientsByUserId(id: string) {
+  public async getMacronutrientsByUserId(userId: string) {
     const macronutrients =
-      await this.macronutrientsODM.getMacronutrientsByUserId(id);
+      await this.macronutrientsODM.getMacronutrientsByUserId(userId);
     if (!macronutrients) throw new Error('Macronutrients not found');
 
     return this.createMacronutrients(macronutrients);
   }
 
-  public async deleteMacronutrientsById(id: string) {
-    return this.macronutrientsODM.deleteMacronutrientsById(id);
+  public async deleteMacronutrientsById(userId: string) {
+    return this.macronutrientsODM.deleteMacronutrientsById(userId);
   }
 }
