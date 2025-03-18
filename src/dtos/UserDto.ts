@@ -5,9 +5,17 @@ export type RegisterUserDto = {
   password: string;
 };
 
-export type LoginUserDto = {
+export type LoginEmailAndPasswordDto = {
   id?: string;
   email: string;
+  token: string;
+};
+
+export type LoginGoogleDto = {
+  token: string;
+};
+
+export type LoginFacebookDto = {
   token: string;
 };
 
