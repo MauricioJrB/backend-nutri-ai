@@ -6,8 +6,9 @@ export type RegisterUserDto = {
 };
 
 export type LoginUserDto = {
+  id?: string;
   email: string;
-  password: string;
+  token: string;
 };
 
 export type FindUserDto = {
