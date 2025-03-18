@@ -1,38 +1,52 @@
-import UserDomain from '../Domains/UserDomain';
-import { IUser } from '../Interfaces/User';
-import UserODM from '../Models/User';
+import { FindUserDto } from '../dtos/UserDto';
+import { IUserService } from '../interfaces/IUser/IUserService';
+import { UserRepository } from '../repositories/UserRepository';
 
-export default class UserService {
-  private userODM = new UserODM();
+export class UserService implements IUserService {
+  private constructor(readonly repository: UserRepository) {}
 
-  private createUser(user: IUser) {
-    return new UserDomain(user);
+  public static build(repository: UserRepository) {
+    return new UserService(repository);
   }
 
-  public async create(user: IUser) {
-    const newUser = await this.userODM.create(user);
-    return this.createUser(newUser);
+  public async find(id: string): Promise<FindUserDto> {
+    const user = await this.repository.find(id);
+    if (!user) throw new Error('User not found');
+
+    const output: FindUserDto = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      password: user.password,
+    };
+    return output;
   }
 
-  public async getUserByEmail(email: string) {
-    const user = await this.userODM.getUserByEmail(email);
-    if (!user) return null;
-    return this.createUser(user);
+  public async findByEmail(email: string): Promise<FindUserDto> {
+    const user = await this.repository.findByEmail(email);
+    if (!user) throw new Error('User not found');
+
+    const output: FindUserDto = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      password: user.password,
+    };
+    return output;
   }
 
-  public async getUserById(id: string) {
-    const user = await this.userODM.getUserById(id);
-    if (!user) return null;
-    return this.createUser(user);
+  public async update(id: string, password: string): Promise<void> {
+    const user = await this.repository.find(id);
+    if (!user) throw new Error('User not found');
+
+    user.changePassword(password);
+    await this.repository.update(id, password);
   }
 
-  public async updatePassword(id: string, password: string) {
-    const newPassword = await this.userODM.updatePassword(id, password);
+  public async delete(id: string): Promise<void> {
+    const user = await this.repository.find(id);
+    if (!user) throw new Error('User not found');
 
-    return newPassword;
-  }
-
-  public async deleteUserById(id: string) {
-    return this.userODM.deleteUserById(id);
+    await this.repository.delete(id);
   }
 }
