@@ -1,9 +1,8 @@
 import { UserProps } from '../@types/UserTypes';
 
-export default class User {
+export class User {
   private constructor(readonly props: UserProps) {}
 
-  // Cria novo objeto do tipo User
   public static create(name: string, email: string, password: string) {
     return new User({
       name,
@@ -11,7 +10,7 @@ export default class User {
       password,
     });
   }
-  // Carrega dados do banco
+
   public static load(
     id: string,
     name: string,
@@ -26,7 +25,6 @@ export default class User {
     });
   }
 
-  // getters
   public get id(): string | undefined {
     return this.props.id;
   }
@@ -43,7 +41,6 @@ export default class User {
     return this.props.password;
   }
 
-  // método de negócio
   public changePassword(newPassword: string): void {
     this.props.password = newPassword;
   }
