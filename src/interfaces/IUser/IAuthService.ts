@@ -1,4 +1,9 @@
-import { LoginUserDto, RegisterUserDto } from '../../dtos/UserDto';
+import {
+  LoginEmailAndPasswordDto,
+  LoginFacebookDto,
+  LoginGoogleDto,
+  RegisterUserDto,
+} from '../../dtos/UserDto';
 
 export interface IAuthService {
   register(
@@ -9,7 +14,7 @@ export interface IAuthService {
   loginWithEmailAndPassword(
     email: string,
     password: string,
-  ): Promise<LoginUserDto>;
-  loginWithGoogle(email: string, token: string): Promise<LoginUserDto>;
-  loginWithFacebook(email: string, token: string): Promise<LoginUserDto>;
+  ): Promise<LoginEmailAndPasswordDto>;
+  loginWithGoogle(email: string, token: string): Promise<LoginGoogleDto>;
+  loginWithFacebook(email: string, token: string): Promise<LoginFacebookDto>;
 }
