@@ -1,10 +1,9 @@
 import cors from 'cors';
-import { IApi } from '../../interfaces/IApi';
+import { IApi } from '../../interfaces/express/IApi';
 import express, { Express, Router } from 'express';
-import { AuthRoutes } from './routes/AuthRoutes';
-import { UserRoutes } from './routes/UserRoutes';
-import { authToken } from './middlewares/authToken';
-import { errorHandle } from './middlewares/errorHandle';
+import { AuthRoutes } from './routes/user/AuthRoutes';
+import { UserRoutes } from './routes/user/UserRoutes';
+import { errorHandle } from './middlewares/error/errorHandle';
 
 export class ApiExpress implements IApi {
   private protectedRoutes: Router;
@@ -21,6 +20,7 @@ export class ApiExpress implements IApi {
     app.use(express.json());
     app.use(
       cors({
+        origin: '*',
         methods: 'GET,POST,PUT,DELETE',
         allowedHeaders: 'Content-Type,Authorization',
       }),
@@ -31,7 +31,7 @@ export class ApiExpress implements IApi {
   private routerConfig(): void {
     this.app.use('/auth', this.authRoutes.getRouter());
     this.protectedRoutes.use('/users', this.userRoutes.getRouter());
-    this.app.use('/api', authToken, this.protectedRoutes);
+    this.app.use('/api', this.protectedRoutes);
     this.app.use(errorHandle);
   }
 
@@ -40,6 +40,8 @@ export class ApiExpress implements IApi {
   }
 
   public start(host: string, port: number): void {
-    this.app.listen(port, () => console.log(`Server is running at ${host}`));
+    this.app.listen(port, () =>
+      console.log(`Server is running at ${host}:${port}`),
+    );
   }
 }
