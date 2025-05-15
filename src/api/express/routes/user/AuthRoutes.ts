@@ -1,10 +1,13 @@
 import { Request, Response, Router } from 'express';
-import { AuthController } from '../controllers/AuthController';
-import { validateData } from '../middlewares/validateData';
 import {
   authLoginSchema,
   authRegistrationSchema,
-} from '../../../schemas/authSchemas';
+} from '../../../../schemas/authSchemas';
+import { generateToken } from '../../middlewares/auth/generateToken';
+import { CustomRequest } from '../../../../interfaces/express/CustomRequest';
+import { decodeOAuthToken } from '../../middlewares/auth/decodeOAuthToken';
+import { AuthController } from '../../Controllers/user/AuthController';
+import { validateData } from '../../middlewares/validateData';
 
 export class AuthRoutes {
   private router: Router;
@@ -22,10 +25,20 @@ export class AuthRoutes {
 
   private initializeRoutes(): void {
     this.router.post(
+      '/login/google',
+      decodeOAuthToken,
+      generateToken,
+      (req: CustomRequest, res: Response) => {
+        this.controller.authUserWithGoole(req, res);
+      },
+    );
+
+    this.router.post(
       '/register',
       validateData(authRegistrationSchema),
       (req: Request, res: Response) => {
-        this.controller.register(req, res);
+        console.log(req);
+        this.controller.registerWithEmailAndPassword(req, res);
       },
     );
 
