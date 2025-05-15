@@ -1,9 +1,10 @@
 import { prisma } from '../../../../utils/prisma';
 import { Request, Response } from 'express';
-import { AuthService } from '../../../../services/user/AuthService';
+
 import { UserRepository } from '../../../../repositories/UserRepository';
 import { CustomRequest } from '../../../../interfaces/express/CustomRequest';
 import { isOAuthUser } from '../../../../utils/isOAuthUser';
+import { AuthService } from '../../../../services/user/AuthService';
 
 export class AuthController {
   private constructor() {}
