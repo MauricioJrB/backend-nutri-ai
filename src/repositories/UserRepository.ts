@@ -1,6 +1,6 @@
 import { User } from '../entities/User';
 import { PrismaClient } from '@prisma/client';
-import { IUserRepository } from '../interfaces/IUser/IUserRepository';
+import { IUserRepository } from '../interfaces/user/IUserRepository';
 
 export class UserRepository implements IUserRepository {
   private constructor(readonly prisma: PrismaClient) {}
@@ -11,8 +11,11 @@ export class UserRepository implements IUserRepository {
 
   public async save(user: User): Promise<User> {
     const data = {
-      name: user.name,
       email: user.email,
+      name: user.name,
+      provider: user.provider,
+      idProvider: user.idProvider,
+      photoUrl: user.photoUrl,
       password: user.password,
     };
 
@@ -20,9 +23,11 @@ export class UserRepository implements IUserRepository {
 
     return User.load(
       savedUser.id,
-      savedUser.name,
       savedUser.email,
-      savedUser.password,
+      savedUser.name,
+      savedUser.provider,
+      savedUser.idProvider,
+      savedUser.photoUrl,
     );
   }
 
@@ -30,8 +35,30 @@ export class UserRepository implements IUserRepository {
     const userExists = await this.prisma.user.findUnique({ where: { id } });
     if (!userExists) return null;
 
-    const { name, email, password } = userExists;
-    const user = User.load(id, name, email, password);
+    const { name, email, provider, idProvider, photoUrl, password } =
+      userExists;
+
+    const user = User.load(
+      id,
+      email,
+      name,
+      provider,
+      idProvider,
+      photoUrl,
+      password,
+    );
+    return user;
+  }
+
+  public async findByIdProvider(idProvider: string) {
+    const userExists = await this.prisma.user.findUnique({
+      where: { idProvider },
+    });
+    if (!userExists) return null;
+
+    const { id, email, name, provider, photoUrl } = userExists;
+
+    const user = User.load(id, email, name, provider, idProvider, photoUrl);
     return user;
   }
 
@@ -39,8 +66,17 @@ export class UserRepository implements IUserRepository {
     const emailExists = await this.prisma.user.findUnique({ where: { email } });
     if (!emailExists) return null;
 
-    const { id, name, password } = emailExists;
-    const user = User.load(id, name, email, password);
+    const { id, name, provider, idProvider, photoUrl, password } = emailExists;
+
+    const user = User.load(
+      id,
+      email,
+      name,
+      provider,
+      idProvider,
+      photoUrl,
+      password,
+    );
     return user;
   }
 
