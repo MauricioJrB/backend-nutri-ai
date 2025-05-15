@@ -10,5 +10,8 @@ export function createProductionConfig() {
     jwtSecret: process.env.JWT_SECRET as string,
     saltRounds: Number(process.env.SALT_ROUNDS) || 10,
     mocksEnabled: process.env.ENABLE_MOCKS === 'true',
+    clientId: process.env.CLIENT_ID as string,
+    androidClientId: process.env.ANDROID_CLIENT_ID as string,
+    webClientId: process.env.WEB_CLIENT_ID as string,
   });
 }

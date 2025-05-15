@@ -1,26 +1,42 @@
-import { UserProps } from '../@types/UserTypes';
+import { UserProps } from '../@types/User';
 
 export class User {
   private constructor(readonly props: UserProps) {}
 
-  public static create(name: string, email: string, password: string) {
+  public static create(
+    email: string,
+    name: string,
+    provider: string,
+    idProvider?: string | null,
+    photoUrl?: string | null,
+    password?: string | null,
+  ) {
     return new User({
-      name,
       email,
-      password,
+      name,
+      provider,
+      idProvider: idProvider || null,
+      photoUrl: photoUrl || null,
+      password: password || null,
     });
   }
 
   public static load(
     id: string,
-    name: string,
     email: string,
-    password: string,
+    name: string,
+    provider: string,
+    idProvider?: string | null,
+    photoUrl?: string | null,
+    password?: string | null,
   ) {
     return new User({
       id,
-      name,
+      idProvider,
       email,
+      name,
+      provider,
+      photoUrl,
       password,
     });
   }
@@ -37,11 +53,23 @@ export class User {
     return this.props.email;
   }
 
-  public get password(): string {
-    return this.props.password;
+  public get idProvider(): string | null {
+    return this.props.idProvider || null;
   }
 
-  public changePassword(newPassword: string): void {
-    this.props.password = newPassword;
+  public get provider(): string {
+    return this.props.provider;
+  }
+
+  public get photoUrl(): string | null {
+    return this.props.photoUrl || null;
+  }
+
+  public get password(): string | null {
+    return this.props.password || null;
+  }
+
+  public changePassword(value: string): void {
+    this.props.password = value;
   }
 }

@@ -9,5 +9,8 @@ export function createLocalConfig() {
     apiGeminiKey: process.env.API_GEMINI_KEY as string,
     jwtSecret: process.env.JWT_SECRET as string,
     saltRounds: Number(process.env.SALT_ROUNDS) || 10,
+    clientId: process.env.CLIENT_ID as string,
+    androidClientId: process.env.ANDROID_CLIENT_ID as string,
+    webClientId: process.env.WEB_CLIENT_ID as string,
   });
 }
