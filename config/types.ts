@@ -9,6 +9,9 @@ export const appConfigSchema = z.object({
   jwtSecret: z.string(),
   saltRounds: z.coerce.number().default(10),
   mocksEnabled: z.boolean().default(false),
+  clientId: z.string(),
+  androidClientId: z.string(),
+  webClientId: z.string(),
 });
 
 export type AppConfig = z.infer<typeof appConfigSchema>;
