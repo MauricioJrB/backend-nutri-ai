@@ -1,8 +1,9 @@
-import { prisma } from '../../../utils/prisma';
-import { UserService } from '../../../services/UserService';
-import { CustomRequest } from '../middlewares/authToken';
-import { UserRepository } from '../../../repositories/UserRepository';
+import { prisma } from '../../../../utils/prisma';
+import { UserService } from '../../../../services/user/UserService';
+
+import { UserRepository } from '../../../../repositories/UserRepository';
 import { Request, Response } from 'express';
+import { CustomRequest } from '../../../../interfaces/express/CustomRequest';
 
 export default class UserController {
   private constructor() {}
@@ -27,7 +28,6 @@ export default class UserController {
         id: output.id,
         name: output.name,
         email: output.email,
-        password: output.password,
       };
       return res.status(200).json(data);
     } catch (error) {
@@ -39,12 +39,13 @@ export default class UserController {
   public async updatePassword(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const { password } = req.body;
+      const { oldPassword, newPassword } = req.body;
 
       const repository = UserRepository.build(prisma);
       const service = UserService.build(repository);
 
-      await service.update(id, password);
+      await service.update(id, oldPassword, newPassword);
+
       return res.status(200).json({ message: 'Password updated successfully' });
     } catch (error) {
       if (error instanceof Error)
