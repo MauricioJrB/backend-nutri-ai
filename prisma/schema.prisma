@@ -17,4 +17,25 @@ model User {
   password    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  macros Macro[]
+}
+
+model Macro {
+  @@map("macros")
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String @db.ObjectId
+  BMR           Float
+  TDEE          Float
+  totalKcal     Float
+  proteinKcal   Float
+  fatKcal       Float
+  carbKcal      Float
+  proteinGrams  Float
+  fatGrams      Float
+  carbGrams     Float
+  amountWater   Float
+  createdAt     DateTime @default(now())
+
+  user        User @relation(fields: [userId], references: [id])
 }
