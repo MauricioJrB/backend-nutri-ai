@@ -1,27 +1,19 @@
-export type RegisterUserDto = {
+import { User } from '../entities/User';
+
+export type UserResponseDto = {
   id?: string;
+  email: string;
   name: string;
-  email: string;
-  password: string;
+  photoUrl?: string | null;
 };
 
-export type LoginEmailAndPasswordDto = {
-  id?: string;
-  email: string;
-  token: string;
-};
-
-export type LoginGoogleDto = {
-  token: string;
-};
-
-export type LoginFacebookDto = {
-  token: string;
-};
-
-export type FindUserDto = {
-  id?: string;
-  name: string;
-  email: string;
-  password: string;
-};
+export class UserDto {
+  public static userResponse(user: User): UserResponseDto {
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      photoUrl: user.photoUrl,
+    };
+  }
+}
