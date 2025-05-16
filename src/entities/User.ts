@@ -68,8 +68,4 @@ export class User {
   public get password(): string | null {
     return this.props.password || null;
   }
-
-  public changePassword(value: string): void {
-    this.props.password = value;
-  }
 }
