@@ -1,4 +1,10 @@
 import { UserProfileProps } from '../@types/UserProfile';
+import {
+  ActivityFrequency,
+  ActivityLevel,
+  Gender,
+  Objective,
+} from '@prisma/client';
 
 export class UserProfile {
   private constructor(readonly props: UserProfileProps) {}
@@ -19,7 +25,7 @@ export class UserProfile {
     return this.props.age;
   }
 
-  public get gender(): string {
+  public get gender(): Gender {
     return this.props.gender;
   }
 
@@ -31,15 +37,15 @@ export class UserProfile {
     return this.props.weight;
   }
 
-  public get activityLevel(): string {
+  public get activityLevel(): ActivityLevel {
     return this.props.activityLevel;
   }
 
-  public get objective(): string {
+  public get objective(): Objective {
     return this.props.objective;
   }
 
-  public get activityFrequency(): string {
+  public get activityFrequency(): ActivityFrequency {
     return this.props.activityFrequency;
   }
 }
