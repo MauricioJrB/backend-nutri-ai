@@ -24,14 +24,14 @@ model User {
 
 model UserProfile {
   id                String @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String @db.ObjectId
+  userId            String @db.ObjectId @unique
   age               Int
-  gender            String
+  gender            Gender
   height            Float
   weight            Float
-  activityLevel     String
-  objective         String
-  activityFrequency String
+  activityLevel     ActivityLevel
+  objective         Objective
+  activityFrequency ActivityFrequency
   createdAt         DateTime @default(now())
 
   user              User @relation(fields: [userId], references: [id])
@@ -54,4 +54,30 @@ model Macro {
   createdAt     DateTime @default(now())
 
   user          User @relation(fields: [userId], references: [id])
+}
+
+enum Gender {
+  Masculino
+  Feminino
+}
+
+enum ActivityLevel {
+  Sedentario
+  PoucoAtivo
+  ModeradamenteAtivo
+  MuitoAtivo
+  ExtremamenteAtivo
+}
+
+enum Objective {
+  PerderPeso
+  GanharMusculo
+  ManterPeso
+}
+
+enum ActivityFrequency {
+  Nunca
+  UmaADuasVezesPorSemana
+  TresAQuatroVezesPorSemana
+  CincoOuMaisVezesPorSemana
 }
