@@ -1,11 +1,18 @@
+import {
+  ActivityFrequency,
+  ActivityLevel,
+  Gender,
+  Objective,
+} from '@prisma/client';
+
 export type UserProfileProps = {
   id?: string;
   userId: string;
   age: number;
-  gender: string;
+  gender: Gender;
   height: number;
   weight: number;
-  activityLevel: string;
-  objective: string;
-  activityFrequency: string;
+  activityLevel: ActivityLevel;
+  objective: Objective;
+  activityFrequency: ActivityFrequency;
 };
