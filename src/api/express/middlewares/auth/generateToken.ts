@@ -1,8 +1,9 @@
 import jwt from 'jsonwebtoken';
 import { config } from '../../../../../config';
-import { isOAuthUser } from '../../../../utils/auth/isOAuthUser';
+
 import { CustomRequest } from '../../../../interfaces/express/CustomRequest';
 import { Response, NextFunction } from 'express';
+import { isOAuthUser } from '../../../../utils/isOAuthUser';
 
 export const generateToken = async (
   req: CustomRequest,
