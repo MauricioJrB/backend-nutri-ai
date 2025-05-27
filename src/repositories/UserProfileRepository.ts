@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { UserProfile } from '../entities/UserProfile';
 import { IUserProfileRepository } from '../interfaces/userProfile/IUserProfileRepository';
-import { UserProfileProps } from '../@types/UserProfile';
+import { UserProfileMapper } from '../mappers/UserProfileMapper';
 
 export class UserProfileRepository implements IUserProfileRepository {
   private constructor(readonly prisma: PrismaClient) {}
@@ -25,37 +25,7 @@ export class UserProfileRepository implements IUserProfileRepository {
       },
     });
 
-    return UserProfile.create({
-      id: userProfile.id,
-      userId: userProfile.userId,
-      age: userProfile.age,
-      gender: userProfile.gender,
-      height: userProfile.height,
-      weight: userProfile.weight,
-      activityLevel: userProfile.activityLevel,
-      objective: userProfile.objective,
-      activityFrequency: userProfile.activityFrequency,
-    });
-  }
-
-  public async find(id: string): Promise<UserProfile | null> {
-    const userProfile = await this.prisma.userProfile.findUnique({
-      where: { id },
-    });
-
-    if (!userProfile) return null;
-
-    return UserProfile.create({
-      id: userProfile.id,
-      userId: userProfile.userId,
-      age: userProfile.age,
-      gender: userProfile.gender,
-      height: userProfile.height,
-      weight: userProfile.weight,
-      activityLevel: userProfile.activityLevel,
-      objective: userProfile.objective,
-      activityFrequency: userProfile.activityFrequency,
-    });
+    return UserProfileMapper.fromPrisma(userProfile);
   }
 
   public async findByUserId(userId: string): Promise<UserProfile | null> {
@@ -65,39 +35,27 @@ export class UserProfileRepository implements IUserProfileRepository {
 
     if (!userProfile) return null;
 
-    return UserProfile.create({
-      id: userProfile.id,
-      userId: userProfile.userId,
-      age: userProfile.age,
-      gender: userProfile.gender,
-      height: userProfile.height,
-      weight: userProfile.weight,
-      activityLevel: userProfile.activityLevel,
-      objective: userProfile.objective,
-      activityFrequency: userProfile.activityFrequency,
-    });
+    return UserProfileMapper.fromPrisma(userProfile);
   }
 
-  public async update(data: Partial<UserProfileProps>): Promise<UserProfile> {
+  public async update(id: string, data: UserProfile): Promise<UserProfile> {
     const userProfile = await this.prisma.userProfile.update({
-      where: { id: data.id },
-      data,
+      where: { id },
+      data: {
+        age: data.age,
+        gender: data.gender,
+        height: data.height,
+        weight: data.weight,
+        activityLevel: data.activityLevel,
+        objective: data.objective,
+        activityFrequency: data.activityFrequency,
+      },
     });
 
-    return UserProfile.create({
-      id: userProfile.id,
-      userId: userProfile.userId,
-      age: userProfile.age,
-      gender: userProfile.gender,
-      height: userProfile.height,
-      weight: userProfile.weight,
-      activityLevel: userProfile.activityLevel,
-      objective: userProfile.objective,
-      activityFrequency: userProfile.activityFrequency,
-    });
+    return UserProfileMapper.fromPrisma(userProfile);
   }
 
-  public async delete(id: string): Promise<void> {
-    await this.prisma.userProfile.delete({ where: { id } });
+  public async delete(userId: string): Promise<void> {
+    await this.prisma.userProfile.delete({ where: { userId } });
   }
 }
