@@ -3,7 +3,7 @@ import { config } from '../../../../../config';
 
 import { CustomRequest } from '../../../../interfaces/express/CustomRequest';
 import { Response, NextFunction } from 'express';
-import { isOAuthUser } from '../../../../utils/isOAuthUser';
+import { isOAuthUser } from '../../../../utils/auth/isOAuthUser';
 
 export const generateToken = async (
   req: CustomRequest,
