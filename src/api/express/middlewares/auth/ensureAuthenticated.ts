@@ -1,7 +1,7 @@
 import { NextFunction, Response } from 'express';
 import { CustomRequest } from '../../../../interfaces/express/CustomRequest';
-import { isAuthUserJwt } from '../../../../utils/isAuthUserJwt';
-import { isOAuthUser } from '../../../../utils/isOAuthUser';
+import { isAuthUserJwt } from '../../../../utils/auth/isAuthUserJwt';
+import { isOAuthUser } from '../../../../utils/auth/isOAuthUser';
 
 export const ensureAuthenticated = (
   req: CustomRequest,
