@@ -1,4 +1,11 @@
-import { User } from '../entities/User';
+export type CreateUserDto = {
+  email: string;
+  name: string;
+  provider?: string | null;
+  idProvider?: string | null;
+  photoUrl?: string | null;
+  password?: string | null;
+};
 
 export type UserResponseDto = {
   id?: string;
@@ -7,13 +14,11 @@ export type UserResponseDto = {
   photoUrl?: string | null;
 };
 
-export class UserDto {
-  public static userResponse(user: User): UserResponseDto {
-    return {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      photoUrl: user.photoUrl,
-    };
-  }
-}
+export type UserLoginResponseDto = {
+  token: string;
+};
+
+export type UpdateUserPasswordDto = {
+  oldPassword: string;
+  newPassword: string;
+};
