@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { config } from '../../config';
+import { config } from '../../../config';
 
 export const passwordHash = async (password: string) => {
   const salt = bcrypt.genSaltSync(config.saltRounds);
