@@ -1,7 +1,8 @@
 import { Response, Router } from 'express';
-import UserController from '../../Controllers/user/UserController';
-import { decodeTokenJwt } from '../../middlewares/auth/decodeTokenJwt';
+import UserController from '../../controllers/user/UserController';
+import { decodeToken } from '../../middlewares/auth/decodeToken';
 import { CustomRequest } from '../../../../interfaces/express/CustomRequest';
+import { ensureAuthenticated } from '../../middlewares/auth/ensureAuthenticated';
 
 export class UserRoutes {
   private router: Router;
@@ -18,24 +19,27 @@ export class UserRoutes {
   }
   private initializeRoutes(): void {
     this.router.get(
-      '/:id',
-      decodeTokenJwt,
+      '/me',
+      decodeToken,
+      ensureAuthenticated,
       (req: CustomRequest, res: Response) => {
         this.controller.find(req, res);
       },
     );
 
     this.router.put(
-      '/:id',
-      decodeTokenJwt,
+      '/me',
+      decodeToken,
+      ensureAuthenticated,
       (req: CustomRequest, res: Response) => {
         this.controller.updatePassword(req, res);
       },
     );
 
     this.router.delete(
-      '/:id',
-      decodeTokenJwt,
+      '/me',
+      decodeToken,
+      ensureAuthenticated,
       (req: CustomRequest, res: Response) => {
         this.controller.delete(req, res);
       },

@@ -21,7 +21,7 @@ export class UserRepository implements IUserRepository {
 
     const savedUser = await this.prisma.user.create({ data });
 
-    return User.load(
+    return User.create(
       savedUser.id,
       savedUser.email,
       savedUser.name,

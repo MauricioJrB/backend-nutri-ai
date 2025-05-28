@@ -1,34 +1,30 @@
 import { prisma } from '../../../../utils/prisma';
 import { UserService } from '../../../../services/user/UserService';
-
 import { UserRepository } from '../../../../repositories/UserRepository';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { CustomRequest } from '../../../../interfaces/express/CustomRequest';
 
 export default class UserController {
-  private constructor() {}
+  constructor(private readonly service: UserService) {}
 
   public static build() {
-    return new UserController();
+    const repository = UserRepository.build(prisma);
+    const service = UserService.build(repository);
+    return new UserController(service);
   }
 
   public async find(req: CustomRequest, res: Response) {
     try {
-      const { id } = req.params;
-
       if (!req.user) {
-        return res.status(401).json({ message: 'Unauthorized' });
+        return res
+          .status(401)
+          .json({ error: 'Unauthorized. No user found in request.' });
       }
 
-      const repository = UserRepository.build(prisma);
-      const service = UserService.build(repository);
+      const id = req.user.id;
 
-      const output = await service.find(id);
-      const data = {
-        id: output.id,
-        name: output.name,
-        email: output.email,
-      };
+      const data = await this.service.find(id);
+
       return res.status(200).json(data);
     } catch (error) {
       if (error instanceof Error)
@@ -36,15 +32,18 @@ export default class UserController {
     }
   }
 
-  public async updatePassword(req: Request, res: Response) {
+  public async updatePassword(req: CustomRequest, res: Response) {
     try {
-      const { id } = req.params;
+      if (!req.user) {
+        return res
+          .status(401)
+          .json({ error: 'Unauthorized. No user found in request.' });
+      }
+
+      const id = req.user.id;
       const { oldPassword, newPassword } = req.body;
 
-      const repository = UserRepository.build(prisma);
-      const service = UserService.build(repository);
-
-      await service.update(id, oldPassword, newPassword);
+      await this.service.update(id, oldPassword, newPassword);
 
       return res.status(200).json({ message: 'Password updated successfully' });
     } catch (error) {
@@ -53,14 +52,17 @@ export default class UserController {
     }
   }
 
-  public async delete(req: Request, res: Response) {
+  public async delete(req: CustomRequest, res: Response) {
     try {
-      const { id } = req.params;
+      if (!req.user) {
+        return res
+          .status(401)
+          .json({ error: 'Unauthorized. No user found in request.' });
+      }
 
-      const repository = UserRepository.build(prisma);
-      const service = UserService.build(repository);
+      const id = req.user.id;
 
-      await service.delete(id);
+      await this.service.delete(id);
       return res.status(200).json({ message: 'User deleted successfully' });
     } catch (error) {
       if (error instanceof Error)

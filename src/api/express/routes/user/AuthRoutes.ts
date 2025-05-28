@@ -5,8 +5,8 @@ import {
 } from '../../../../schemas/authSchemas';
 import { generateToken } from '../../middlewares/auth/generateToken';
 import { CustomRequest } from '../../../../interfaces/express/CustomRequest';
-import { decodeOAuthToken } from '../../middlewares/auth/decodeOAuthToken';
-import { AuthController } from '../../Controllers/user/AuthController';
+import { decodeToken } from '../../middlewares/auth/decodeToken';
+import { AuthController } from '../../controllers/user/AuthController';
 import { validateData } from '../../middlewares/validateData';
 
 export class AuthRoutes {
@@ -26,7 +26,7 @@ export class AuthRoutes {
   private initializeRoutes(): void {
     this.router.post(
       '/login/google',
-      decodeOAuthToken,
+      decodeToken,
       generateToken,
       (req: CustomRequest, res: Response) => {
         this.controller.authUserWithGoole(req, res);

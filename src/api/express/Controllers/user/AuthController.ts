@@ -3,14 +3,17 @@ import { Request, Response } from 'express';
 
 import { UserRepository } from '../../../../repositories/UserRepository';
 import { CustomRequest } from '../../../../interfaces/express/CustomRequest';
-import { isOAuthUser } from '../../../../utils/isOAuthUser';
+
 import { AuthService } from '../../../../services/user/AuthService';
+import { isOAuthUser } from '../../../../utils/auth/isOAuthUser';
 
 export class AuthController {
-  private constructor() {}
+  constructor(private readonly service: AuthService) {}
 
   public static build() {
-    return new AuthController();
+    const repository = UserRepository.build(prisma);
+    const service = AuthService.build(repository);
+    return new AuthController(service);
   }
 
   public async authUserWithGoole(req: CustomRequest, res: Response) {
@@ -20,13 +23,11 @@ export class AuthController {
           .status(401)
           .json({ error: 'Unauthorized. No user found in request.' });
       }
+
       const { idProvider, email, name, photoUrl } = req.user;
       const token = req.token;
 
-      const repository = UserRepository.build(prisma);
-      const service = AuthService.build(repository);
-
-      const user = await service.authUserWithGoogle(
+      const user = await this.service.authUserWithGoogle(
         idProvider,
         email,
         name,
@@ -48,10 +49,7 @@ export class AuthController {
     try {
       const { name, email, password } = req.body;
 
-      const repository = UserRepository.build(prisma);
-      const service = AuthService.build(repository);
-
-      const user = await service.registerWithEmailAndPassword(
+      const user = await this.service.registerWithEmailAndPassword(
         name,
         email,
         password,
@@ -67,9 +65,10 @@ export class AuthController {
     try {
       const { email, password } = req.body;
 
-      const repository = UserRepository.build(prisma);
-      const service = AuthService.build(repository);
-      const user = await service.loginWithEmailAndPassword(email, password);
+      const user = await this.service.loginWithEmailAndPassword(
+        email,
+        password,
+      );
 
       return res.status(200).json(user);
     } catch (error) {

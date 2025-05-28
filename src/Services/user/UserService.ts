@@ -1,9 +1,9 @@
-import { UserDto, UserResponseDto } from '../../dtos/UserDto';
-import { User } from '../../entities/User';
+import { UserResponseDto } from '../../dtos/UserDto';
 import { IUserService } from '../../interfaces/user/IUserService';
 import { UserRepository } from '../../repositories/UserRepository';
 import bcrypt from 'bcrypt';
-import { passwordHash } from '../../utils/passwordHash';
+import { passwordHash } from '../../utils/auth/passwordHash';
+import { UserMapper } from '../../mappers/UserMapper';
 
 export class UserService implements IUserService {
   private constructor(readonly repository: UserRepository) {}
@@ -15,13 +15,13 @@ export class UserService implements IUserService {
   public async find(id: string): Promise<UserResponseDto> {
     const user = await this.repository.find(id);
     if (!user) throw new Error('User not found');
-    return UserDto.userResponse(user);
+    return UserMapper.toResponseDto(user);
   }
 
-  public async findByEmail(email: string): Promise<User> {
+  public async findByEmail(email: string): Promise<UserResponseDto> {
     const user = await this.repository.findByEmail(email);
     if (!user) throw new Error('User not found');
-    return user;
+    return UserMapper.toResponseDto(user);
   }
 
   public async update(

@@ -1,23 +1,23 @@
-import { User } from '../../entities/User';
 import { IAuthService } from '../../interfaces/user/IAuthService';
-import { UserRepository } from '../../repositories/UserRepository';
-import { UserDto, UserResponseDto } from '../../dtos/UserDto';
-import { passwordHash } from '../../utils/passwordHash';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { config } from '../../../config';
+import { IUserRepository } from '../../interfaces/user/IUserRepository';
+import { passwordHash } from '../../utils/auth/passwordHash';
+import { UserMapper } from '../../mappers/UserMapper';
+import { UserLoginResponseDto, UserResponseDto } from '../../dtos/UserDto';
 
 export class AuthService implements IAuthService {
-  private constructor(readonly repository: UserRepository) {}
+  private constructor(readonly repository: IUserRepository) {}
 
-  public static build(repository: UserRepository) {
+  public static build(repository: IUserRepository) {
     return new AuthService(repository);
   }
 
   public async loginWithEmailAndPassword(
     email: string,
     password: string,
-  ): Promise<UserDto> {
+  ): Promise<UserLoginResponseDto> {
     const user = await this.repository.findByEmail(email);
     if (!user) throw new Error('User not found');
 
@@ -31,9 +31,10 @@ export class AuthService implements IAuthService {
       id: user.id,
       email: user.email,
     };
+
     const token = jwt.sign(payload, config.jwtSecret);
 
-    return { token, id: user.id, email: user.email };
+    return { token };
   }
 
   public async registerWithEmailAndPassword(
@@ -46,18 +47,18 @@ export class AuthService implements IAuthService {
 
     const passwordEncrypted = await passwordHash(password);
 
-    const userObj = User.create(
+    const user = UserMapper.toEntity({
       email,
       name,
-      'email',
-      null,
-      null,
-      passwordEncrypted,
-    );
+      provider: 'email',
+      idProvider: null,
+      photoUrl: null,
+      password: passwordEncrypted,
+    });
 
-    const newUser = await this.repository.save(userObj);
+    const savedUser = await this.repository.save(user);
 
-    return UserDto.userResponse(newUser);
+    return UserMapper.toResponseDto(savedUser);
   }
 
   public async authUserWithGoogle(
@@ -68,19 +69,23 @@ export class AuthService implements IAuthService {
   ): Promise<UserResponseDto> {
     const userExists = await this.repository.findByIdProvider(idProvider);
 
-    if (userExists) return UserDto.userResponse(userExists);
+    if (userExists) return UserMapper.toResponseDto(userExists);
 
-    const userObj = User.create(
-      idProvider,
-      name,
+    const userExistsByEmail = await this.repository.findByEmail(email);
+
+    if (userExistsByEmail) return UserMapper.toResponseDto(userExistsByEmail);
+
+    const user = UserMapper.toEntity({
       email,
-      'google',
-      picture,
-      null,
-    );
+      name,
+      provider: 'google',
+      idProvider: idProvider,
+      photoUrl: picture,
+      password: null,
+    });
 
-    await this.repository.save(userObj);
+    const savedUser = await this.repository.save(user);
 
-    return UserDto.userResponse(userObj);
+    return UserMapper.toResponseDto(savedUser);
   }
 }
