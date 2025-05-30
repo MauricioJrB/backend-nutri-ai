@@ -11,6 +11,7 @@ export interface IUserProfileService {
     userId: string,
   ): Promise<UserProfileResponseDto>;
   findByUserId(userId: string): Promise<UserProfileResponseDto>;
+  findEntityByUserId(userId: string): Promise<UserProfile>;
   update(userId: string, data: UpdateUserProfileDto): Promise<UserProfile>;
   delete(userId: string): Promise<void>;
 }
