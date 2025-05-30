@@ -1,8 +1,6 @@
-import { MacroDto } from '../../dtos/MacroDto';
-import { Macro } from '../../entities/Macro';
-
+import { MacroResponseDto } from '../../dtos/MacroDto';
 export interface IMacroService {
-  save(data: Macro): Promise<MacroDto>;
-  find(id: string): Promise<MacroDto>;
+  save(userid: string): Promise<MacroResponseDto>;
+  findByUserId(userId: string): Promise<MacroResponseDto>;
   delete(id: string): Promise<void>;
 }
