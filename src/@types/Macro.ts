@@ -1,5 +1,5 @@
 export type MacroProps = {
-  id: string;
+  id?: string;
   userId: string;
   BMR: number;
   TDEE: number;

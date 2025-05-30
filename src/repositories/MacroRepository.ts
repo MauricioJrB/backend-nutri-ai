@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { Macro } from '../entities/Macro';
 import { IMacroRepository } from '../interfaces/macro/IMacroRepository';
+import { MacroMapper } from '../mappers/MacroMapper';
 
 export class MacroRepository implements IMacroRepository {
   private constructor(readonly prisma: PrismaClient) {}
@@ -12,7 +13,7 @@ export class MacroRepository implements IMacroRepository {
   public async save(data: Macro): Promise<Macro> {
     const macro = await this.prisma.macro.create({
       data: {
-        id: data.id,
+        id: data.id || undefined,
         userId: data.userId,
         BMR: data.BMR,
         TDEE: data.TDEE,
@@ -27,44 +28,18 @@ export class MacroRepository implements IMacroRepository {
       },
     });
 
-    return Macro.create({
-      id: macro.id,
-      userId: macro.userId,
-      BMR: macro.BMR,
-      TDEE: macro.TDEE,
-      totalKcal: macro.totalKcal,
-      proteinKcal: macro.proteinKcal,
-      fatKcal: macro.fatKcal,
-      carbKcal: macro.carbKcal,
-      proteinGrams: macro.proteinGrams,
-      fatGrams: macro.fatGrams,
-      carbGrams: macro.carbGrams,
-      amountWater: macro.amountWater,
-    });
+    return MacroMapper.fromPrisma(macro);
   }
 
-  public async find(id: string): Promise<Macro | null> {
-    const macro = await this.prisma.macro.findUnique({ where: { id } });
+  public async findByUserId(userId: string): Promise<Macro | null> {
+    const macro = await this.prisma.macro.findUnique({ where: { userId } });
 
     if (!macro) return null;
 
-    return Macro.create({
-      id: macro.id,
-      userId: macro.userId,
-      BMR: macro.BMR,
-      TDEE: macro.TDEE,
-      totalKcal: macro.totalKcal,
-      proteinKcal: macro.proteinKcal,
-      fatKcal: macro.fatKcal,
-      carbKcal: macro.carbKcal,
-      proteinGrams: macro.proteinGrams,
-      fatGrams: macro.fatGrams,
-      carbGrams: macro.carbGrams,
-      amountWater: macro.amountWater,
-    });
+    return MacroMapper.fromPrisma(macro);
   }
 
-  public async delete(id: string): Promise<void> {
-    await this.prisma.macro.delete({ where: { id } });
+  public async delete(userId: string): Promise<void> {
+    await this.prisma.macro.delete({ where: { userId } });
   }
 }

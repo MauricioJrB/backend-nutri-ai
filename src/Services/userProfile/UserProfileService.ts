@@ -40,6 +40,14 @@ export class UserProfileService implements IUserProfileService {
     return UserProfileMapper.toResponseDto(userProfile);
   }
 
+  public async findEntityByUserId(userId: string): Promise<UserProfile> {
+    const userProfile = await this.repository.findByUserId(userId);
+
+    if (!userProfile) throw new Error('User profile not found');
+
+    return userProfile;
+  }
+
   public async update(
     userId: string,
     data: UpdateUserProfileDto,
