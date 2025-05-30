@@ -7,8 +7,8 @@ export class Macro {
     return new Macro(props);
   }
 
-  public get id(): string {
-    return this.props.id;
+  public get id(): string | null {
+    return this.props.id || null;
   }
 
   public get userId(): string {
