@@ -6,6 +6,7 @@ import { UserRoutes } from './routes/user/UserRoutes';
 import { errorHandle } from './middlewares/error/errorHandle';
 import { UserProfileRoutes } from './routes/userProfile/UserProfileRoutes';
 import { MacroRoutes } from './routes/macro/MacroRoutes';
+import { UserPreferenceRoutes } from './routes/userPreference/UserPreferenceRoutes';
 
 export class ApiExpress implements IApi {
   private protectedRoutes: Router;
@@ -13,6 +14,7 @@ export class ApiExpress implements IApi {
   private userRoutes = UserRoutes.build();
   private userProfileRoutes = UserProfileRoutes.build();
   private macroRoutes = MacroRoutes.build();
+  private userPreference = UserPreferenceRoutes.build();
 
   constructor(readonly app: Express) {
     this.protectedRoutes = Router();
@@ -37,6 +39,10 @@ export class ApiExpress implements IApi {
     this.protectedRoutes.use('/users', this.userRoutes.getRouter());
     this.protectedRoutes.use('/profile', this.userProfileRoutes.getRouter());
     this.protectedRoutes.use('/macro', this.macroRoutes.getRouter());
+    this.protectedRoutes.use(
+      '/user-preference',
+      this.userPreference.getRouter(),
+    );
     this.app.use('/api', this.protectedRoutes);
     this.app.use(errorHandle);
   }

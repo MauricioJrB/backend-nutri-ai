@@ -1,8 +1,8 @@
 import { prisma } from '../../../../utils/prisma';
-import { UserService } from '../../../../services/user/UserService';
-import { UserRepository } from '../../../../repositories/UserRepository';
 import { Response } from 'express';
+import { UserService } from '../../../../services/user/UserService';
 import { CustomRequest } from '../../../../interfaces/express/CustomRequest';
+import { UserRepository } from '../../../../repositories/user/UserRepository';
 
 export default class UserController {
   constructor(private readonly service: UserService) {}

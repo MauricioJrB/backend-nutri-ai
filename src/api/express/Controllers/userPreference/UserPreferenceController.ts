@@ -1,34 +1,34 @@
-import { prisma } from '../../../../utils/prisma';
 import { Response } from 'express';
+import { UserPreferenceRepository } from '../../../../repositories/userPreference/UserPreferenceRepository';
+import { UserPreferenceService } from '../../../../services/userPreference/UserPreferenceService';
+import { prisma } from '../../../../utils/prisma';
 import { CustomRequest } from '../../../../interfaces/express/CustomRequest';
-import { UserProfileService } from '../../../../services/userProfile/UserProfileService';
-import { UserProfileRepository } from '../../../../repositories/userProfile/UserProfileRepository';
 import {
-  CreateUserProfileDto,
-  UpdateUserProfileDto,
-} from '../../../../dtos/UserProfileDto';
+  CreateUserPreferenceDto,
+  UpdateUserPreferenceDto,
+} from '../../../../dtos/UserPreferenceDto';
 
-export class UserProfileController {
-  constructor(private readonly service: UserProfileService) {}
+export class UserPreferenceController {
+  constructor(private readonly service: UserPreferenceService) {}
 
   public static build() {
-    const repository = UserProfileRepository.build(prisma);
-    const service = UserProfileService.build(repository);
-    return new UserProfileController(service);
+    const repository = UserPreferenceRepository.build(prisma);
+    const service = UserPreferenceService.build(repository);
+    return new UserPreferenceController(service);
   }
 
   public async save(req: CustomRequest, res: Response) {
     try {
-      if (!req.user) {
+      if (!req.user)
         return res
           .status(401)
-          .json({ error: 'Unauthorized. No user found in request.' });
-      }
+          .json({ message: 'Unauthorized. No user found in request.' });
 
       const userId = req.user.id;
-      const userProfile: CreateUserProfileDto = req.body;
+      const userPreference: CreateUserPreferenceDto = req.body;
 
-      const data = await this.service.save(userProfile, userId);
+      const data = await this.service.save(userPreference, userId);
+
       return res.status(201).json(data);
     } catch (error) {
       if (error instanceof Error)
@@ -38,11 +38,10 @@ export class UserProfileController {
 
   public async findByUserId(req: CustomRequest, res: Response) {
     try {
-      if (!req.user) {
+      if (!req.user)
         return res
           .status(401)
-          .json({ error: 'Unauthorized. No user found in request.' });
-      }
+          .json({ message: 'Unauthorized. No user found in request.' });
 
       const userId = req.user.id;
       const data = await this.service.findByUserId(userId);
@@ -56,16 +55,15 @@ export class UserProfileController {
 
   public async update(req: CustomRequest, res: Response) {
     try {
-      if (!req.user) {
+      if (!req.user)
         return res
           .status(401)
-          .json({ error: 'Unauthorized. No user found in request.' });
-      }
+          .json({ message: 'Unauthorized. No user found in request.' });
 
       const userId = req.user.id;
-      const userProfile: UpdateUserProfileDto = req.body;
+      const userPreference: UpdateUserPreferenceDto = req.body;
 
-      const data = await this.service.update(userId, userProfile);
+      const data = await this.service.update(userId, userPreference);
 
       return res.status(200).json(data);
     } catch (error) {
@@ -76,17 +74,16 @@ export class UserProfileController {
 
   public async delete(req: CustomRequest, res: Response) {
     try {
-      if (!req.user) {
+      if (!req.user)
         return res
           .status(401)
           .json({ error: 'Unauthorized. No user found in request.' });
-      }
 
       const userId = req.user.id;
       await this.service.delete(userId);
       return res
         .status(200)
-        .json({ message: 'User profile deleted successfully' });
+        .json({ message: 'User preference deleted successfully.' });
     } catch (error) {
       if (error instanceof Error)
         return res.status(400).json({ error: error.message });
