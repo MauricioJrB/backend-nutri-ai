@@ -8,21 +8,24 @@ datasource db {
 }
 model User {
   @@map("users")
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  email       String  @unique
-  name        String
-  provider    String
-  idProvider  String?  @unique
-  photoUrl    String? 
-  password    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  email           String  @unique
+  name            String
+  provider        String
+  idProvider      String?  @unique
+  photoUrl        String? 
+  password        String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
-  macros      Macro[]
-  userProfile UserProfile[]
+  macros          Macro[]
+  userProfile     UserProfile[]
+  userPreferense  UserPreference[]
+  diets           Diet[]
 }
 
 model UserProfile {
+  @@map("userProfile")
   id                String @id @default(auto()) @map("_id") @db.ObjectId
   userId            String @db.ObjectId @unique
   age               Int
@@ -54,6 +57,69 @@ model Macro {
   createdAt     DateTime @default(now())
 
   user          User @relation(fields: [userId], references: [id])
+}
+
+model UserPreference {
+  @@map("userPreferense")
+  id                    String @id @default(auto()) @map("_id") @db.ObjectId
+  userId                String @db.ObjectId @unique
+  userWantsSuplements   String
+  userAlreadyUses       String
+  sheduleTrainingStart  String
+  sheduleTrainingEnd    String
+  userHasScale          String
+  dietType              DietType
+  foodRestrictions      String
+  customSuggestionFood  String
+  createdAt             DateTime @default(now())
+
+  user                  User      @relation(fields: [userId], references: [id])
+}
+
+model Diet {
+  @@map("diets")
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String    @db.ObjectId
+  expectedCalories  Float
+  expectedProtein   Float
+  expectedCarb      Float
+  expectedFat       Float
+  createdAt         DateTime  @default(now())
+
+  user              User      @relation(fields: [userId], references: [id])
+  meals             Meal[]
+}
+
+model Meal {
+  @@map("meals")
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  dietId    String   @db.ObjectId
+  time      String   
+  name      String   
+  calories  Float
+  createdAt DateTime @default(now())
+
+  diet      Diet     @relation(fields: [dietId], references: [id])
+  foods     FoodItem[]
+}
+
+model FoodItem {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  mealId    String   @db.ObjectId
+  item      String   
+  quantity  String 
+  protein   Float
+  carb      Float
+  fat       Float
+
+  meal      Meal     @relation(fields: [mealId], references: [id])
+}
+
+enum DietType {
+  Normal
+  Vegetariana
+  Cetogenica
+  Vegana
 }
 
 enum Gender {
