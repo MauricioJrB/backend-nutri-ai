@@ -1,7 +1,7 @@
+import { UserProfile } from '../../entities/UserProfile';
 import { PrismaClient } from '@prisma/client';
-import { UserProfile } from '../entities/UserProfile';
-import { IUserProfileRepository } from '../interfaces/userProfile/IUserProfileRepository';
-import { UserProfileMapper } from '../mappers/UserProfileMapper';
+import { UserProfileMapper } from '../../mappers/UserProfileMapper';
+import { IUserProfileRepository } from './IUserProfileRepository';
 
 export class UserProfileRepository implements IUserProfileRepository {
   private constructor(readonly prisma: PrismaClient) {}

@@ -18,7 +18,7 @@ export const userProfileSchemas = {
     weight: z.number(),
     activityLevel: z.nativeEnum(ActivityLevel, {
       errorMap: () => ({
-        message: 'QInvalid activity level',
+        message: 'Invalid activity level',
       }),
     }),
     objective: z.nativeEnum(Objective, {

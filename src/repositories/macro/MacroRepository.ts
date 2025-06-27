@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
-import { Macro } from '../entities/Macro';
-import { IMacroRepository } from '../interfaces/macro/IMacroRepository';
-import { MacroMapper } from '../mappers/MacroMapper';
+import { IMacroRepository } from './IMacroRepository';
+import { Macro } from '../../entities/Macro';
+import { MacroMapper } from '../../mappers/MacroMapper';
 
 export class MacroRepository implements IMacroRepository {
   private constructor(readonly prisma: PrismaClient) {}
@@ -32,7 +32,7 @@ export class MacroRepository implements IMacroRepository {
   }
 
   public async findByUserId(userId: string): Promise<Macro | null> {
-    const macro = await this.prisma.macro.findUnique({ where: { userId } });
+    const macro = await this.prisma.macro.findFirst({ where: { userId } });
 
     if (!macro) return null;
 

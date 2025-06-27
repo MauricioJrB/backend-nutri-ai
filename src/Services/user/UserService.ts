@@ -1,9 +1,10 @@
 import { UserResponseDto } from '../../dtos/UserDto';
-import { IUserService } from '../../interfaces/user/IUserService';
-import { UserRepository } from '../../repositories/UserRepository';
+import { IUserService } from './IUserService';
+
 import bcrypt from 'bcrypt';
 import { passwordHash } from '../../utils/auth/passwordHash';
 import { UserMapper } from '../../mappers/UserMapper';
+import { UserRepository } from '../../repositories/user/UserRepository';
 
 export class UserService implements IUserService {
   private constructor(readonly repository: UserRepository) {}

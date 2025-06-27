@@ -1,8 +1,8 @@
-import { IAuthService } from '../../interfaces/user/IAuthService';
+import { IAuthService } from './IAuthService';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { config } from '../../../config';
-import { IUserRepository } from '../../interfaces/user/IUserRepository';
+import { IUserRepository } from '../../repositories/user/IUserRepository';
 import { passwordHash } from '../../utils/auth/passwordHash';
 import { UserMapper } from '../../mappers/UserMapper';
 import { UserLoginResponseDto, UserResponseDto } from '../../dtos/UserDto';

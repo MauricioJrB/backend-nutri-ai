@@ -4,8 +4,8 @@ import {
   UserProfileResponseDto,
 } from '../../dtos/UserProfileDto';
 import { UserProfile } from '../../entities/UserProfile';
-import { IUserProfileRepository } from '../../interfaces/userProfile/IUserProfileRepository';
-import { IUserProfileService } from '../../interfaces/userProfile/IUserProfileService';
+import { IUserProfileRepository } from '../../repositories/userProfile/IUserProfileRepository';
+import { IUserProfileService } from './IUserProfileService';
 import { UserProfileMapper } from '../../mappers/UserProfileMapper';
 
 export class UserProfileService implements IUserProfileService {
@@ -35,7 +35,7 @@ export class UserProfileService implements IUserProfileService {
   public async findByUserId(userId: string): Promise<UserProfileResponseDto> {
     const userProfile = await this.repository.findByUserId(userId);
 
-    if (!userProfile) throw new Error('User profile not found');
+    if (!userProfile) throw new Error('User profile not found.');
 
     return UserProfileMapper.toResponseDto(userProfile);
   }
@@ -61,6 +61,7 @@ export class UserProfileService implements IUserProfileService {
 
     return updated;
   }
+
   public async delete(userId: string): Promise<void> {
     const userProfile = await this.repository.findByUserId(userId);
 
