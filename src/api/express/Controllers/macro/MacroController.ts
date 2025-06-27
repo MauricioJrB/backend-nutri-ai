@@ -1,8 +1,8 @@
-import { Response } from 'express';
-import { MacroRepository } from '../../../../repositories/MacroRepository';
-import { MacroService } from '../../../../services/macro/MacroService';
 import { prisma } from '../../../../utils/prisma';
+import { Response } from 'express';
+import { MacroService } from '../../../../services/macro/MacroService';
 import { CustomRequest } from '../../../../interfaces/express/CustomRequest';
+import { MacroRepository } from '../../../../repositories/macro/MacroRepository';
 
 export class MacroController {
   constructor(private readonly service: MacroService) {}

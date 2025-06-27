@@ -1,9 +1,8 @@
-import { Response } from 'express';
-import { UserProfileService } from '../../../../services/userProfile/UserProfileService';
-import { CustomRequest } from '../../../../interfaces/express/CustomRequest';
-
-import { UserProfileRepository } from '../../../../repositories/UserProfileRepository';
 import { prisma } from '../../../../utils/prisma';
+import { Response } from 'express';
+import { CustomRequest } from '../../../../interfaces/express/CustomRequest';
+import { UserProfileService } from '../../../../services/userProfile/UserProfileService';
+import { UserProfileRepository } from '../../../../repositories/userProfile/UserProfileRepository';
 import {
   CreateUserProfileDto,
   UpdateUserProfileDto,
@@ -85,7 +84,9 @@ export class UserProfileController {
 
       const userId = req.user.id;
       await this.service.delete(userId);
-      return res.status(200).json({ message: 'User deleted successfully' });
+      return res
+        .status(200)
+        .json({ message: 'User profile deleted successfully' });
     } catch (error) {
       if (error instanceof Error)
         return res.status(400).json({ error: error.message });
