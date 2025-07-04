@@ -7,7 +7,6 @@ export type UserPreferenceProps = {
   userAlreadyUses: string;
   sheduleTrainingStart: string;
   sheduleTrainingEnd: string;
-  userHasScale: string;
   dietType: DietType;
   foodRestrictions: string;
   customSuggestionFood: string;

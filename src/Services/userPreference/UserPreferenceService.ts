@@ -31,10 +31,6 @@ export class UserPreferenceService implements IUserPreferenceService {
     return UserPreferenceMapper.toResponseDto(savedUserPreference);
   }
 
-  find(id: string): Promise<UserPreferenceResponseDto> {
-    throw new Error('Method not implemented');
-  }
-
   public async findByUserId(
     userId: string,
   ): Promise<UserPreferenceResponseDto> {
@@ -63,11 +59,11 @@ export class UserPreferenceService implements IUserPreferenceService {
     return updated;
   }
 
-  public async delete(userId: string): Promise<void> {
+  public async deleteByUserId(userId: string): Promise<void> {
     const userPreference = await this.repository.findByUserId(userId);
 
     if (!userPreference) throw new Error('User preference not found');
 
-    await this.repository.delete(userId);
+    await this.repository.deleteByUserId(userId);
   }
 }

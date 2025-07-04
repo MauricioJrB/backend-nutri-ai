@@ -60,14 +60,13 @@ model Macro {
 }
 
 model UserPreference {
-  @@map("userPreferense")
+  @@map("userPreferenses")
   id                    String @id @default(auto()) @map("_id") @db.ObjectId
   userId                String @db.ObjectId @unique
   userWantsSuplements   String
   userAlreadyUses       String
   sheduleTrainingStart  String
   sheduleTrainingEnd    String
-  userHasScale          String
   dietType              DietType
   foodRestrictions      String
   customSuggestionFood  String
@@ -104,6 +103,7 @@ model Meal {
 }
 
 model FoodItem {
+  @@map("foodItems")
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   mealId    String   @db.ObjectId
   item      String   

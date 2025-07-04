@@ -35,9 +35,8 @@ export class MacroService implements IMacroService {
 
   public async findByUserId(userId: string): Promise<MacroResponseDto> {
     const macro = await this.repository.findByUserId(userId);
-    console.log('User id: ', userId);
     if (!macro) throw new Error('User not found');
-    console.log('Macro: ', macro);
+
     return MacroMapper.toResponseDto(macro);
   }
 

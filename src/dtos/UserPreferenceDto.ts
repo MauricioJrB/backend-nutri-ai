@@ -6,7 +6,6 @@ export type CreateUserPreferenceDto = {
   userAlreadyUses: string;
   sheduleTrainingStart: string;
   sheduleTrainingEnd: string;
-  userHasScale: string;
   dietType: DietType;
   foodRestrictions: string;
   customSuggestionFood: string;
@@ -19,7 +18,6 @@ export type UserPreferenceResponseDto = {
   userAlreadyUses: string;
   sheduleTrainingStart: string;
   sheduleTrainingEnd: string;
-  userHasScale: string;
   dietType: DietType;
   foodRestrictions: string;
   customSuggestionFood: string;

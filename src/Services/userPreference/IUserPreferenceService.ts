@@ -10,11 +10,10 @@ export interface IUserPreferenceService {
     data: CreateUserPreferenceDto,
     userId: string,
   ): Promise<UserPreferenceResponseDto>;
-  find(id: string): Promise<UserPreferenceResponseDto>;
   findByUserId(userId: string): Promise<UserPreferenceResponseDto>;
   update(
     userId: string,
     data: UpdateUserPreferenceDto,
   ): Promise<UserPreference>;
-  delete(userId: string): Promise<void>;
+  deleteByUserId(userId: string): Promise<void>;
 }

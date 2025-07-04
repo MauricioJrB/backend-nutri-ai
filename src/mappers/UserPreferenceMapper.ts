@@ -17,7 +17,6 @@ export class UserPreferenceMapper {
       userAlreadyUses: dto.userAlreadyUses,
       sheduleTrainingStart: dto.sheduleTrainingStart,
       sheduleTrainingEnd: dto.sheduleTrainingEnd,
-      userHasScale: dto.userHasScale,
       dietType: dto.dietType,
       foodRestrictions: dto.foodRestrictions,
       customSuggestionFood: dto.customSuggestionFood,
@@ -34,7 +33,6 @@ export class UserPreferenceMapper {
       userAlreadyUses: userPreference.userAlreadyUses,
       sheduleTrainingStart: userPreference.sheduleTrainingStart,
       sheduleTrainingEnd: userPreference.sheduleTrainingEnd,
-      userHasScale: userPreference.userHasScale,
       dietType: userPreference.dietType,
       foodRestrictions: userPreference.foodRestrictions,
       customSuggestionFood: userPreference.customSuggestionFood,
@@ -55,7 +53,6 @@ export class UserPreferenceMapper {
         update.sheduleTrainingStart ?? current.sheduleTrainingStart,
       sheduleTrainingEnd:
         update.sheduleTrainingEnd ?? current.sheduleTrainingEnd,
-      userHasScale: update.userHasScale ?? current.userHasScale,
       dietType: update.dietType ?? current.dietType,
       foodRestrictions: update.foodRestrictions ?? current.foodRestrictions,
       customSuggestionFood:
@@ -73,7 +70,6 @@ export class UserPreferenceMapper {
       userAlreadyUses: userPreference.userAlreadyUses,
       sheduleTrainingStart: userPreference.sheduleTrainingStart,
       sheduleTrainingEnd: userPreference.sheduleTrainingEnd,
-      userHasScale: userPreference.userHasScale,
       dietType: userPreference.dietType,
       foodRestrictions: userPreference.foodRestrictions,
       customSuggestionFood: userPreference.customSuggestionFood,
