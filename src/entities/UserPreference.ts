@@ -32,10 +32,6 @@ export class UserPreference {
     return this.props.sheduleTrainingEnd;
   }
 
-  public get userHasScale(): string {
-    return this.props.userHasScale;
-  }
-
   public get dietType(): DietType {
     return this.props.dietType;
   }
