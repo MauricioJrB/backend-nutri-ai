@@ -80,7 +80,7 @@ export class UserPreferenceController {
           .json({ error: 'Unauthorized. No user found in request.' });
 
       const userId = req.user.id;
-      await this.service.delete(userId);
+      await this.service.deleteByUserId(userId);
       return res
         .status(200)
         .json({ message: 'User preference deleted successfully.' });
