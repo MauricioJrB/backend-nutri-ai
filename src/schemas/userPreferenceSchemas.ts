@@ -13,7 +13,6 @@ export const userPreferenceSchemas = {
     sheduleTrainingEnd: z
       .string()
       .min(1, 'Invalid field, should be a valid time'),
-    userHasScale: z.string().min(1, 'Invalid field, should be "sim" or "não"'),
     dietType: z.nativeEnum(DietType, {
       errorMap: () => ({
         message:
