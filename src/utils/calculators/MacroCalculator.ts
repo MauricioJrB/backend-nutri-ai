@@ -1,5 +1,6 @@
 import { Macro } from '../../entities/Macro';
 import { UserProfile } from '../../entities/UserProfile';
+import { adjustValue } from './adjustValue';
 
 export class MacroCalculator {
   private getBMR(gender: string, weight: number, height: number, age: number) {
@@ -58,15 +59,15 @@ export class MacroCalculator {
     return Macro.create({
       id: undefined,
       userId,
-      BMR: parseFloat(BMR.toFixed(2)),
-      TDEE: parseFloat(TDEE.toFixed(2)),
-      totalKcal: parseFloat(totalKcal.toFixed(2)),
-      proteinKcal: parseFloat(proteinKcal.toFixed(2)),
-      fatKcal: parseFloat(fatKcal.toFixed(2)),
-      carbKcal: parseFloat(carbKcal.toFixed(2)),
-      proteinGrams: parseFloat(proteinGrams.toFixed(2)),
-      fatGrams: parseFloat(fatGrams.toFixed(2)),
-      carbGrams: parseFloat(carbGrams.toFixed(2)),
+      BMR: adjustValue(BMR),
+      TDEE: adjustValue(TDEE),
+      totalKcal: adjustValue(totalKcal),
+      proteinKcal: adjustValue(proteinKcal),
+      fatKcal: adjustValue(fatKcal),
+      carbKcal: adjustValue(carbKcal),
+      proteinGrams: adjustValue(proteinGrams),
+      fatGrams: adjustValue(fatGrams),
+      carbGrams: adjustValue(carbGrams),
       amountWater,
     });
   }
