@@ -4,4 +4,5 @@ export interface IUserService {
   findByEmail(id: string): Promise<UserResponseDto>;
   update(id: string, oldPassword: string, newPassword: string): Promise<void>;
   delete(id: string): Promise<void>;
+  deleteAccount(id: string): Promise<void>;
 }
