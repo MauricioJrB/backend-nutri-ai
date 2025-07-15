@@ -83,7 +83,7 @@ export class UserProfileController {
       }
 
       const userId = req.user.id;
-      await this.service.delete(userId);
+      await this.service.deleteByUserId(userId);
       return res
         .status(200)
         .json({ message: 'User profile deleted successfully' });
