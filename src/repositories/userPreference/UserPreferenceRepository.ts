@@ -68,14 +68,8 @@ export class UserPreferenceRepository implements IUserPreferenceRepository {
     return UserPreferenceMapper.fromPrisma(userPreference);
   }
 
-  public async delete(id: string): Promise<void> {
-    await this.prisma.userPreference.delete({
-      where: { id },
-    });
-  }
-
   public async deleteByUserId(userId: string): Promise<void> {
-    await this.prisma.userPreference.delete({
+    await this.prisma.userPreference.deleteMany({
       where: { userId },
     });
   }
