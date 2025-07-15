@@ -181,10 +181,11 @@ export class DietService implements IDietService {
     };
   }
 
-  public async delete(userId: string): Promise<void> {
+  public async deleteByUserId(userId: string): Promise<void> {
     const diet = await this.dietRepository.findByUserId(userId);
     const mealExists = await this.mealRepository.findByUserId(userId);
     const foodItemExists = await this.foodItemRepository.findByUserId(userId);
+
     if (!mealExists && !foodItemExists) {
       throw new Error('No meals or food items found for this user');
     }
