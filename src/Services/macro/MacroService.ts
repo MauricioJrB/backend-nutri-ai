@@ -40,11 +40,11 @@ export class MacroService implements IMacroService {
     return MacroMapper.toResponseDto(macro);
   }
 
-  public async delete(userId: string): Promise<void> {
+  public async deleteByUserId(userId: string): Promise<void> {
     const macro = await this.repository.findByUserId(userId);
 
     if (!macro) throw new Error('Macro not found');
 
-    await this.repository.delete(userId);
+    await this.repository.deleteByUserId(userId);
   }
 }
