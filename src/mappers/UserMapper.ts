@@ -21,4 +21,17 @@ export class UserMapper {
       photoUrl: user.photoUrl,
     };
   }
+
+  public static toResponseDtoWithToken(
+    user: User,
+    token: string,
+  ): UserResponseDto & { token: string } {
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      photoUrl: user.photoUrl,
+      token,
+    };
+  }
 }

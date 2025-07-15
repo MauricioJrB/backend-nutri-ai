@@ -39,7 +39,7 @@ export class MacroRepository implements IMacroRepository {
     return MacroMapper.fromPrisma(macro);
   }
 
-  public async delete(userId: string): Promise<void> {
-    await this.prisma.macro.delete({ where: { userId } });
+  public async deleteByUserId(userId: string): Promise<void> {
+    await this.prisma.macro.deleteMany({ where: { userId } });
   }
 }

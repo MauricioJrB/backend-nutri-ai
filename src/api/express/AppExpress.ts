@@ -1,4 +1,5 @@
 import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
 import { IApi } from '../../interfaces/express/IApi';
 import express, { Express, Router } from 'express';
 import { AuthRoutes } from './routes/user/AuthRoutes';
@@ -8,6 +9,7 @@ import { UserProfileRoutes } from './routes/userProfile/UserProfileRoutes';
 import { MacroRoutes } from './routes/macro/MacroRoutes';
 import { UserPreferenceRoutes } from './routes/userPreference/UserPreferenceRoutes';
 import { DietRoutes } from './routes/diet/DietRoutes';
+import swaggerDoc from '../../docs/swagger.json';
 
 export class ApiExpress implements IApi {
   private protectedRoutes: Router;
@@ -38,7 +40,7 @@ export class ApiExpress implements IApi {
 
   private routerConfig(): void {
     this.app.use('/auth', this.authRoutes.getRouter());
-    this.protectedRoutes.use('/users', this.userRoutes.getRouter());
+    this.protectedRoutes.use('/user', this.userRoutes.getRouter());
     this.protectedRoutes.use('/profile', this.userProfileRoutes.getRouter());
     this.protectedRoutes.use('/macro', this.macroRoutes.getRouter());
     this.protectedRoutes.use(
@@ -47,6 +49,9 @@ export class ApiExpress implements IApi {
     );
     this.protectedRoutes.use('/diet', this.dietRoutes.getRouter());
     this.app.use('/api', this.protectedRoutes);
+
+    this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
+
     this.app.use(errorHandle);
   }
 

@@ -127,12 +127,6 @@ export class MealRepository implements IMealRepository {
     });
   }
 
-  public async deleteByDietId(dietId: string): Promise<void> {
-    await this.prisma.meal.deleteMany({
-      where: { dietId },
-    });
-  }
-
   public async deleteByUserId(userId: string): Promise<void> {
     const meals = await this.prisma.meal.findMany({
       where: { diet: { userId } },

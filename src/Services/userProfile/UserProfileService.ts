@@ -62,11 +62,11 @@ export class UserProfileService implements IUserProfileService {
     return updated;
   }
 
-  public async delete(userId: string): Promise<void> {
+  public async deleteByUserId(userId: string): Promise<void> {
     const userProfile = await this.repository.findByUserId(userId);
 
     if (!userProfile) throw new Error('User profile not found');
 
-    await this.repository.delete(userId);
+    await this.repository.deleteByUserId(userId);
   }
 }

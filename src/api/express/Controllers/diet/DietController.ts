@@ -71,7 +71,7 @@ export class DietController {
           .status(401)
           .json({ message: 'Unauthorized. No user found in request.' });
       const userId = req.user.id;
-      await this.service.delete(userId);
+      await this.service.deleteByUserId(userId);
       return res.status(200).send({ message: 'Diet deleted successfully.' });
     } catch (error) {
       if (error instanceof Error)

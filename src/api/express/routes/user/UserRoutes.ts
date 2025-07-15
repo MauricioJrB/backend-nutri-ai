@@ -44,6 +44,15 @@ export class UserRoutes {
         this.controller.delete(req, res);
       },
     );
+
+    this.router.delete(
+      '/account',
+      decodeToken,
+      ensureAuthenticated,
+      (req: CustomRequest, res: Response) => {
+        this.controller.deleteAccount(req, res);
+      },
+    );
   }
 
   public getRouter(): Router {

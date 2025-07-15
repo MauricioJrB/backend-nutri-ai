@@ -3,7 +3,6 @@ import {
   UpdateUserPreferenceDto,
   UserPreferenceResponseDto,
 } from '../../dtos/UserPreferenceDto';
-import { UserPreference } from '../../entities/UserPreference';
 
 export interface IUserPreferenceService {
   save(
@@ -14,6 +13,6 @@ export interface IUserPreferenceService {
   update(
     userId: string,
     data: UpdateUserPreferenceDto,
-  ): Promise<UserPreference>;
+  ): Promise<UserPreferenceResponseDto>;
   deleteByUserId(userId: string): Promise<void>;
 }

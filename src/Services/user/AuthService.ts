@@ -34,7 +34,7 @@ export class AuthService implements IAuthService {
 
     const token = jwt.sign(payload, config.jwtSecret);
 
-    return { token };
+    return UserMapper.toResponseDtoWithToken(user, token);
   }
 
   public async registerWithEmailAndPassword(

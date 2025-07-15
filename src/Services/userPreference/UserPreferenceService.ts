@@ -3,7 +3,6 @@ import {
   UpdateUserPreferenceDto,
   UserPreferenceResponseDto,
 } from '../../dtos/UserPreferenceDto';
-import { UserPreference } from '../../entities/UserPreference';
 import { UserPreferenceMapper } from '../../mappers/UserPreferenceMapper';
 import { IUserPreferenceRepository } from '../../repositories/userPreference/IUserPreferenceRepositoy';
 import { IUserPreferenceService } from './IUserPreferenceService';
@@ -44,7 +43,7 @@ export class UserPreferenceService implements IUserPreferenceService {
   public async update(
     userId: string,
     data: UpdateUserPreferenceDto,
-  ): Promise<UserPreference> {
+  ): Promise<UserPreferenceResponseDto> {
     const current = await this.repository.findByUserId(userId);
 
     if (!current || !current.id) throw new Error('User preference not found');
@@ -56,7 +55,7 @@ export class UserPreferenceService implements IUserPreferenceService {
 
     const updated = await this.repository.update(current.id, updatedEntity);
 
-    return updated;
+    return UserPreferenceMapper.toResponseDto(updated);
   }
 
   public async deleteByUserId(userId: string): Promise<void> {
