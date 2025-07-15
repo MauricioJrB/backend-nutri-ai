@@ -55,7 +55,7 @@ export class UserProfileRepository implements IUserProfileRepository {
     return UserProfileMapper.fromPrisma(userProfile);
   }
 
-  public async delete(userId: string): Promise<void> {
-    await this.prisma.userProfile.delete({ where: { userId } });
+  public async deleteByUserId(userId: string): Promise<void> {
+    await this.prisma.userProfile.deleteMany({ where: { userId } });
   }
 }
