@@ -103,12 +103,6 @@ export class DietRepository implements IDietRepository {
     });
   }
 
-  public async delete(id: string): Promise<void> {
-    await this.prisma.diet.delete({
-      where: { id },
-    });
-  }
-
   public async deleteByUserId(userId: string): Promise<void> {
     await this.prisma.diet.deleteMany({
       where: { userId },
