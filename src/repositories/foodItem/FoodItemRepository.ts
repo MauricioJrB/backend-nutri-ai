@@ -93,18 +93,6 @@ export class FoodItemRepository implements IFoodItemRepository {
     );
   }
 
-  public async delete(id: string): Promise<void> {
-    await this.prisma.foodItem.delete({
-      where: { id },
-    });
-  }
-
-  public async deleteByMealId(mealId: string): Promise<void> {
-    await this.prisma.foodItem.deleteMany({
-      where: { mealId },
-    });
-  }
-
   public async deleteByUserId(userId: string): Promise<void> {
     await this.prisma.foodItem.deleteMany({
       where: {
