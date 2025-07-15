@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 export const appConfigSchema = z.object({
-  env: z.enum(['local', 'staging', 'production']),
-  apiURL: z.string().url(),
+  env: z.enum(['local', 'production']),
+  apiURL: z.string(),
   port: z.coerce.number().default(8000),
   databaseURL: z.string(),
   apiGeminiKey: z.string(),
