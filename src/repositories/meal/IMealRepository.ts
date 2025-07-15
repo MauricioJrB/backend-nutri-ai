@@ -6,7 +6,5 @@ export interface IMealRepository {
   findByUserId(userId: string): Promise<Meal[]>;
   findByDietId(dietId: string): Promise<Meal[]>;
   update(id: string, data: Meal): Promise<Meal>;
-  delete(id: string): Promise<void>;
-  deleteByDietId(dietId: string): Promise<void>;
   deleteByUserId(userId: string): Promise<void>;
 }
