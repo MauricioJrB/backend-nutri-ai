@@ -21,7 +21,7 @@ export class UserProfileRoutes {
 
   private initializeRoutes(): void {
     this.router.post(
-      '/',
+      '/me',
       validateData(userProfileSchemas),
       decodeToken,
       ensureAuthenticated,
