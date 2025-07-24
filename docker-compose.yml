@@ -1,0 +1,49 @@
+services:
+  app:
+    build: .
+    container_name: nutri_api
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/usr/src/nutri_api:cached
+      - /usr/src/nutri_api/node_modules
+    depends_on:
+      mongodb-setup:
+        condition: service_completed_successfully
+    env_file:
+      - .env
+
+  mongodb:
+    image: mongo:8.0
+    container_name: mongodb
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data:/data/db
+    command: 'mongod --replSet rs0 --bind_ip_all'
+    healthcheck:
+      test: 'mongosh --eval ''db.adminCommand("ping")'' || exit 1'
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+
+  mongodb-setup:
+    image: mongo:8.0
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    restart: 'no'
+    command: >
+      mongosh --host mongodb:27017 --eval '
+        config = {
+          "_id": "rs0",
+          "members": [
+            { "_id": 0, "host": "mongodb:27017", "priority": 1 }
+          ]
+        };
+        rs.initiate(config);'
+
+volumes:
+  mongodb_data:
+    driver: local
