@@ -25,7 +25,13 @@
 
    ```bash
    git clone https://github.com/MauricioJrB/backend-nutri-ai.git
+   ```
+
+   ```bash
    cd .\backend-nutri-ai\
+   ```
+
+   ```bash
    npm install
    ```
 
@@ -54,22 +60,17 @@
      - 1. Matenha a variável de ambiente
           `DATABASE_URL=mongodb://mongodb:27017/db?replicaSet=rs0` que está em `.env.example`.
 
-     - 2. Para construir as imagens e iniciar todos os serviços use este comando:
+     - 2. Para construir as imagens e iniciar todos os serviços use este comando uma única vez:
 
        ```bash
        docker-compose up --build -d
        ```
-
-       E em seguida seu terminal terá algo assim:
-       ![image](https://github-production-user-asset-6210df.s3.amazonaws.com/127567339/469992686-81aa316d-e9ec-4d04-bd5c-58311f74ffb5.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20250723%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20250723T205942Z&X-Amz-Expires=300&X-Amz-Signature=4cac1cd49d1f3c225cfc7a489c2d046fa00e1e99aa31b36fca29d97cef6eb432&X-Amz-SignedHeaders=host)
 
        E para finalizar o Docker utilize:
 
        ```bash
        docker-compose down
        ```
-
-       ![image](https://github-production-user-asset-6210df.s3.amazonaws.com/127567339/469994537-722db1e0-c2d4-4f79-bad0-e7815531b03f.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20250723%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20250723T210202Z&X-Amz-Expires=300&X-Amz-Signature=00cba86a5bd86fa59a8af9ef2d5138ef705e1a3625167b2e627075b714992464&X-Amz-SignedHeaders=host)
 
        Para deletar o container criado utilize:
 
