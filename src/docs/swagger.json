@@ -113,8 +113,8 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "oldPassword": { "type": "password123" },
-                  "newPassword": { "type": "123password" }
+                  "oldPassword": { "type": "string", "example": "password123" },
+                  "newPassword": { "type": "string", "example": "123password" }
                 },
                 "required": ["oldPassword", "newPassword"]
               }
@@ -316,7 +316,7 @@
         "security": [{ "bearerAuth": [] }],
         "responses": {
           "200": {
-            "description": "Perfil do usuário criado com sucesso"
+            "description": "Perfil do usuário atualizado com sucesso"
           },
           "401": {
             "description": "token inválido ou expirado"
