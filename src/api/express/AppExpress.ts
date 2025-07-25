@@ -43,10 +43,7 @@ export class ApiExpress implements IApi {
     this.protectedRoutes.use('/user', this.userRoutes.getRouter());
     this.protectedRoutes.use('/profile', this.userProfileRoutes.getRouter());
     this.protectedRoutes.use('/macro', this.macroRoutes.getRouter());
-    this.protectedRoutes.use(
-      '/user-preference',
-      this.userPreference.getRouter(),
-    );
+    this.protectedRoutes.use('/preference', this.userPreference.getRouter());
     this.protectedRoutes.use('/diet', this.dietRoutes.getRouter());
     this.app.use('/api', this.protectedRoutes);
 
