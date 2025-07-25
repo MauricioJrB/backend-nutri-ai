@@ -400,7 +400,7 @@
         }
       }
     },
-    "/api/user-preference": {
+    "/api/preference": {
       "post": {
         "summary": "Cria as preferências do usuário",
         "tags": ["User Preference"],
