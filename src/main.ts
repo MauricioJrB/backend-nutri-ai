@@ -5,7 +5,7 @@ import { ApiExpress } from './api/express/AppExpress';
 function main() {
   connectDB();
   const api = ApiExpress.build();
-  api.start(config.apiURL, config.port);
+  api.start(config.apiURL, config.port, config.env);
 }
 
 main();
