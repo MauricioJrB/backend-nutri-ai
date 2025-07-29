@@ -27,14 +27,16 @@ export class AuthController {
 
       const user = await this.service.authUserWithGoogle(
         idProvider,
-        email,
         name,
+        email,
         photoUrl || null,
       );
+
       const data = {
         ...user,
         token,
       };
+
       return res.status(201).json(data);
     } catch (error) {
       if (error instanceof Error) {

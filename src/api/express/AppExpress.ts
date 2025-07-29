@@ -56,9 +56,9 @@ export class ApiExpress implements IApi {
     return this.app;
   }
 
-  public start(host: string, port: number): void {
+  public start(host: string, port: number, env: string): void {
     this.app.listen(port, () =>
-      console.log(`Server is running at ${host}:${port}`),
+      console.log(`Server is running at ${host}:${port}\nEnvironment: ${env}`),
     );
   }
 }

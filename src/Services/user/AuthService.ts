@@ -47,14 +47,17 @@ export class AuthService implements IAuthService {
 
     const passwordEncrypted = await passwordHash(password);
 
-    const user = UserMapper.toEntity({
+    const data = {
+      id: '',
       email,
       name,
       provider: 'email',
       idProvider: null,
       photoUrl: null,
       password: passwordEncrypted,
-    });
+    };
+
+    const user = UserMapper.toEntity(data);
 
     const savedUser = await this.repository.save(user);
 
@@ -85,7 +88,6 @@ export class AuthService implements IAuthService {
     });
 
     const savedUser = await this.repository.save(user);
-
     return UserMapper.toResponseDto(savedUser);
   }
 }

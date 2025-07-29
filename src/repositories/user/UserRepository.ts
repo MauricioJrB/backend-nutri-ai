@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { IUserRepository } from './IUserRepository';
 import { User } from '../../entities/User';
+import { UserMapper } from '../../mappers/UserMapper';
 
 export class UserRepository implements IUserRepository {
   private constructor(readonly prisma: PrismaClient) {}
@@ -9,75 +10,43 @@ export class UserRepository implements IUserRepository {
     return new UserRepository(prisma);
   }
 
-  public async save(user: User): Promise<User> {
-    const data = {
-      email: user.email,
-      name: user.name,
-      provider: user.provider,
-      idProvider: user.idProvider,
-      photoUrl: user.photoUrl,
-      password: user.password,
-    };
+  public async save(data: User): Promise<User> {
+    const user = await this.prisma.user.create({
+      data: {
+        id: data.id || undefined,
+        email: data.email,
+        name: data.name,
+        provider: data.provider,
+        idProvider: data.idProvider || null,
+        photoUrl: data.photoUrl || null,
+        password: data.password || null,
+      },
+    });
 
-    const savedUser = await this.prisma.user.create({ data });
-
-    return User.create(
-      savedUser.id,
-      savedUser.email,
-      savedUser.name,
-      savedUser.provider,
-      savedUser.idProvider,
-      savedUser.photoUrl,
-    );
+    return UserMapper.fromPrisma(user);
   }
 
   public async find(id: string): Promise<User | null> {
-    const userExists = await this.prisma.user.findUnique({ where: { id } });
-    if (!userExists) return null;
+    const user = await this.prisma.user.findUnique({ where: { id } });
+    if (!user) return null;
 
-    const { name, email, provider, idProvider, photoUrl, password } =
-      userExists;
-
-    const user = User.load(
-      id,
-      email,
-      name,
-      provider,
-      idProvider,
-      photoUrl,
-      password,
-    );
-    return user;
+    return UserMapper.fromPrisma(user);
   }
 
   public async findByIdProvider(idProvider: string) {
-    const userExists = await this.prisma.user.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { idProvider },
     });
-    if (!userExists) return null;
+    if (!user) return null;
 
-    const { id, email, name, provider, photoUrl } = userExists;
-
-    const user = User.load(id, email, name, provider, idProvider, photoUrl);
-    return user;
+    return UserMapper.fromPrisma(user);
   }
 
   public async findByEmail(email: string): Promise<User | null> {
-    const emailExists = await this.prisma.user.findUnique({ where: { email } });
-    if (!emailExists) return null;
+    const user = await this.prisma.user.findUnique({ where: { email } });
+    if (!user) return null;
 
-    const { id, name, provider, idProvider, photoUrl, password } = emailExists;
-
-    const user = User.load(
-      id,
-      email,
-      name,
-      provider,
-      idProvider,
-      photoUrl,
-      password,
-    );
-    return user;
+    return UserMapper.fromPrisma(user);
   }
 
   public async update(id: string, password: string): Promise<void> {
