@@ -1,6 +1,9 @@
 export type JwtUser = {
   id: string;
   email: string;
+  name: string;
+  photoUrl?: string | null;
+  password?: string | null;
   type: 'jwt';
 };
 
