@@ -21,6 +21,8 @@ export const decodeToken = async (
       req.user = {
         id: decoded.id,
         email: decoded.email,
+        name: decoded.name,
+        photoUrl: decoded.photoUrl || null,
         type: 'jwt',
       };
 
