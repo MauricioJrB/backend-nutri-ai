@@ -3,42 +3,8 @@ import { UserProps } from '../@types/User';
 export class User {
   private constructor(readonly props: UserProps) {}
 
-  public static create(
-    email: string,
-    name: string,
-    provider: string,
-    idProvider?: string | null,
-    photoUrl?: string | null,
-    password?: string | null,
-  ) {
-    return new User({
-      email,
-      name,
-      provider,
-      idProvider: idProvider || null,
-      photoUrl: photoUrl || null,
-      password: password || null,
-    });
-  }
-
-  public static load(
-    id: string,
-    email: string,
-    name: string,
-    provider: string,
-    idProvider?: string | null,
-    photoUrl?: string | null,
-    password?: string | null,
-  ) {
-    return new User({
-      id,
-      idProvider,
-      email,
-      name,
-      provider,
-      photoUrl,
-      password,
-    });
+  public static create(props: UserProps) {
+    return new User(props);
   }
 
   public get id(): string | undefined {
